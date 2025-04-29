@@ -1,23 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import { GetOrderById } from './BHNV/components/getOrdersById';
+import { Login } from './BHNV/components/login';
+import { AddOrder } from './BHNV/components/addOrder';
+import { GetEvent } from './sikum/getEventThank';
+
+
+
+import { Routing } from './sikum/routing';
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+
+<Routing></Routing>
+{/* <GetOrderById></GetOrderById> */}
+{/* <AddOrder></AddOrder> */}
+{/* <Login></Login> */}
+{/* <GetEvent></GetEvent> */}
     </div>
   );
 }

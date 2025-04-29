@@ -1,0 +1,33 @@
+input, select{
+    display: flex;
+    text-align: center;
+    /* background-color: black; */
+    height: 40px;
+    color: rgb(45, 167, 255);
+    font-size: xx-large;
+    margin: 10px;
+    width: 70%;
+    border: 5px black solid;
+    text-align: center;
+}
+.aba{
+    padding-left: 10%;
+    flex-direction: column;
+    border: 15px rgb(45, 167, 255) solid;
+    border-radius: 10px;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 10%;
+    text-align: center;
+    justify-content: center;
+}
+.selecte{
+    background-color: rgb(214, 15, 91);
+}
+.thh{
+    background-color: blue;
+}
+img{
+    width: 10000px;
+    height: 10000px;
+}
