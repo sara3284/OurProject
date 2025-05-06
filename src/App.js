@@ -7,7 +7,7 @@ import { GetEvent } from './sikum/getEventThank';
 
 
 import { Routing } from './sikum/routing';
-
+//import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 function App() {

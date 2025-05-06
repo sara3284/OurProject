@@ -1,0 +1,622 @@
+:root {
+    --primary-color: #4ecdc4;
+    --secondary-color: #8aedb9;
+    --primary-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --accent-color: #ff6b6b;
+    --text-color: #2d3748;
+    --text-light: #718096;
+    --bg-color: #f7fafc;
+    --white: #ffffff;
+    --error-color: #e53e3e;
+    --success-color: #48bb78;
+    --warning-color: #ed8936;
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+  }
+  
+  /* טעינת פונטים */
+  @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+  
+  /* סגנון בסיסי */
+  body {
+    font-family: 'Heebo', sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+    color: var(--text-color);
+  }
+  
+  /* אנימציית רקע */
+  .background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(78, 205, 196, 0.05) 0%, rgba(78, 205, 196, 0) 70%);
+    z-index: -1;
+    opacity: 0.8;
+    animation: pulse 15s infinite alternate;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+  }
+  
+  /* דאשבורד מנהל */
+  .manager-dashboard {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  /* כותרת דאשבורד */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .greeting-section h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-color);
+    animation: fadeInUp 0.8s ease;
+  }
+  
+  .date-display {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin: 0;
+    animation: fadeInUp 1s ease;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .profile-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .notification-bell {
+    position: relative;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .notification-bell i {
+    font-size: 1.8rem;
+    color: var(--text-light);
+  }
+  
+  .notification-bell:hover i {
+    color: var(--primary-color);
+  }
+  
+  .notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--accent-color);
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 600;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .admin-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+  }
+  
+  .admin-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* כרטיסי סטטיסטיקה */
+  .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .stat-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--primary-gradient);
+    opacity: 0.8;
+  }
+  
+  .stat-card.orders::before {
+    background: linear-gradient(to bottom, #4ecdc4, #8aedb9);
+  }
+  
+  .stat-card.flights::before {
+    background: linear-gradient(to bottom, #4a6bff, #77e1fb);
+  }
+  
+  .stat-card.customers::before {
+    background: linear-gradient(to bottom, #ff6b6b, #ffa26b);
+  }
+  
+  .stat-card.revenue::before {
+    background: linear-gradient(to bottom, #8e44ad, #c0392b);
+  }
+  
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1.5rem;
+  }
+  
+  .stat-card.orders .stat-icon {
+    background-color: rgba(78, 205, 196, 0.1);
+    color: var(--primary-color);
+  }
+  
+  .stat-card.flights .stat-icon {
+    background-color: rgba(74, 107, 255, 0.1);
+    color: #4a6bff;
+  }
+  
+  .stat-card.customers .stat-icon {
+    background-color: rgba(255, 107, 107, 0.1);
+    color: var(--accent-color);
+  }
+  
+  .stat-card.revenue .stat-icon {
+    background-color: rgba(142, 68, 173, 0.1);
+    color: #8e44ad;
+  }
+  
+  .stat-icon i {
+    font-size: 2rem;
+  }
+  
+  .stat-content {
+    flex-grow: 1;
+  }
+  
+  .stat-content h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-light);
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0 0 0.3rem 0;
+  }
+  
+  .stat-detail {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin: 0;
+  }
+  
+  /* פעולות מהירות */
+  .quick-actions-section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .quick-actions-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem 0;
+    color: var(--text-color);
+  }
+  
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .action-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--text-color);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .action-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  
+  .action-card:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  
+  .action-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background-color: rgba(78, 205, 196, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.2rem;
+    color: var(--primary-color);
+    transition: var(--transition);
+  }
+  
+  .action-card:hover .action-icon {
+    background-color: var(--primary-color);
+    color: var(--white);
+  }
+  
+  .action-icon i {
+    font-size: 1.8rem;
+  }
+  
+  .action-content {
+    flex-grow: 1;
+  }
+  
+  .action-content h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-color);
+  }
+  
+  .action-content p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .action-arrow {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    color: var(--text-light);
+    transition: var(--transition);
+  }
+  
+  .action-card:hover .action-arrow {
+    color: var(--primary-color);
+    transform: translateX(-5px);
+  }
+  
+  /* סקציות דאשבורד */
+  .dashboard-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-color);
+  }
+  
+  .view-all-button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .view-all-button:hover {
+    color: #3db9b1;
+    text-decoration: underline;
+  }
+  
+  /* פעילות אחרונה */
+  .recent-activity {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  
+  .activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  
+  .activity-item {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .activity-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+  }
+  
+  .activity-icon.confirmed {
+    background-color: rgba(72, 187, 120, 0.1);
+    color: var(--success-color);
+  }
+  
+  .activity-icon.new-customer {
+    background-color: rgba(74, 107, 255, 0.1);
+    color: #4a6bff;
+  }
+  
+  .activity-icon.cancelled {
+    background-color: rgba(229, 62, 62, 0.1);
+    color: var(--error-color);
+  }
+  
+  .activity-icon.updated {
+    background-color: rgba(237, 137, 54, 0.1);
+    color: var(--warning-color);
+  }
+  
+  .activity-content {
+    flex-grow: 1;
+  }
+  
+  .activity-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0 0 0.3rem 0;
+  }
+  
+  .activity-time {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin: 0;
+  }
+  
+  /* טיסות קרובות */
+  .upcoming-flights {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  
+  .flights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  
+  .flight-item {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .flight-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  
+  .flight-time {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    min-width: 60px;
+  }
+  
+  .flight-route {
+    flex-grow: 1;
+    margin: 0 1.5rem;
+  }
+  
+  .flight-cities {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 0.3rem;
+  }
+  
+  .flight-cities i {
+    font-size: 1rem;
+    color: var(--text-light);
+  }
+  
+  .flight-number {
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  
+  .flight-status {
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+  }
+  
+  .flight-status.on-time {
+    background-color: rgba(72, 187, 120, 0.1);
+    color: var(--success-color);
+  }
+  
+  .flight-status.delayed {
+    background-color: rgba(237, 137, 54, 0.1);
+    color: var(--warning-color);
+  }
+  
+  .flight-status.cancelled {
+    background-color: rgba(229, 62, 62, 0.1);
+    color: var(--error-color);
+  }
+  
+  /* רספונסיביות */
+  @media (max-width: 1200px) {
+    .dashboard-stats,
+    .quick-actions {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .dashboard-sections {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .manager-dashboard {
+      padding: 1.5rem;
+    }
+    
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+    
+    .profile-section {
+      align-self: flex-end;
+    }
+    
+    .greeting-section h1 {
+      font-size: 1.8rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .dashboard-stats,
+    .quick-actions {
+      grid-template-columns: 1fr;
+    }
+    
+    .stat-card {
+      padding: 1.2rem;
+    }
+    
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      margin-left: 1rem;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+    }
+  }

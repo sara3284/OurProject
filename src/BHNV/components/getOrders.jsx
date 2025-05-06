@@ -6,13 +6,25 @@ import { getByCompanyThank } from "../slices/getByCompanyThank";
 import {useEffect, useState } from "react"
 import { getOrdersThank } from "../slices/getOrdersThank";
 import { Manager } from "./manager";
+import { GetOrderById } from "./getOrdersById";
 export const GetOrders = () => {
     const orders = useSelector(state => state.event.orders);
     const dispatch = useDispatch();
     const [company, setcompany] = useState("");
+    const [Selected, setSelected] = useState(false);
+    const [details, setDetails] = useState(false);
     useEffect(()=>{
         dispatch(getOrdersThank())
     },[])
+    const selected = (order) => {
+        setSelected(true);
+        
+    }
+
+   const Details = (order) => {
+setDetails(true);
+dispatch(GetOrderById(order))
+    }
     return <div>
         <Manager></Manager>
         <table>
@@ -25,18 +37,21 @@ export const GetOrders = () => {
                 <th>מחלקה :</th>
             </thead>
 
-            {orders && orders.map((flight, index) => (
+            {orders && orders.map((order, index) => (
 
                 <tbody>
-                    <th>  {flight.code}</th>
-                    <th> {flight.numOfFlight}</th>
-                    <th> {flight.passengerId}</th>
-                    <th> {Date(flight.date)}</th>
-                    <th>  {flight.orderdetails.numOfTickets}</th>
-                    <th>  {flight.numClass}</th>
-                </tbody>
-            ))}
+                    <tr onClick={() => (selected(order))}>
+                    <th>  {order.code}</th>
+                    <th> {order.numOfFlight}</th>
+                    <th> {order.passengerId}</th>
+                    <th> {Date(order.date)}</th>
+                    <th>  {order.orderdetails.numOfTickets}</th>
+                    <th>  {order.numClass}</th></tr>
+                
+                {Selected && <button onClick={() => Details(order.passengerId)}>פרטי המזמין</button>}
+          </tbody>  ))}
         </table>
+        
     </div>
 }
 

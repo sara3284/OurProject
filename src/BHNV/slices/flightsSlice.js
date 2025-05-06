@@ -7,6 +7,8 @@ import { getOrderByIdThank } from "./getOrderByIdThank";
 import { addOrderThank } from "./addOrderThank";
 import { getFlightsThank } from "./getFlightsThank";
 import { getOrdersThank } from "./getOrdersThank";
+import { GetPassengersThank } from "./getPassengersThank";
+import { getOrders_Flights } from "./getOrders_Flights";
 
 export const INITIALSTATE = {
     orders: [{
@@ -22,7 +24,7 @@ export const INITIALSTATE = {
             }
         ]
     }],
-    Orders_Flights: [{
+    Orders_Flights: {
         orderslist: [{
             code: 0,
             numOfFlight: 0,
@@ -55,14 +57,14 @@ export const INITIALSTATE = {
             numOfEmptySeetsInRegilerClass: ""
         }]
     }
-    ],
+    ,
     passenger: [{
         id: "",
         name: "",
         birthDate: "",
         phone: "",
         city: "",
-        age: 20
+        age: 0
     }],
     flights: [{
         numOfFlight: 0,
@@ -126,6 +128,10 @@ export const flightsSlice = createSlice({
 
             state.orders = action.payload;
         });
+        builder.addCase(getOrders_Flights.fulfilled, (state, action) => {
+
+            state.Orders_Flights = action.payload;
+        });
         builder.addCase(addOrderThank.fulfilled, (state, action) => {
             state.orders = action.payload;
             console.log("success");
@@ -134,6 +140,10 @@ export const flightsSlice = createSlice({
         builder.addCase(getFlightsThank.fulfilled, (state, action) => {
 
             state.flights = action.payload;
+        });
+        builder.addCase(GetPassengersThank.fulfilled, (state, action) => {
+
+            state.passenger = action.payload;
         });
         builder.addCase(getOrdersThank.fulfilled, (state, action) => {
 
