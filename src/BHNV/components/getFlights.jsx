@@ -168,6 +168,7 @@ export const GetFlights = () => {
             {passenger.id === "328489976" && <Manager />}
             
             <div className="flights-header">
+                <p>gitttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt</p>
                 <h1>טיסות זמינות</h1>
                 <p>בחר טיסה מהרשימה להזמנת כרטיס</p>
             </div>
