@@ -1,14 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 
-export const getOrderByIdThank = createAsyncThunk(
-    'getOrderByIdThank',
-    async (id) => {
-        const res = await fetch(`https://localhost:7103/api/Orders/GetOrdersByPassengerId/${id}`,
-
+export const UpdatePassenger = createAsyncThunk(
+    'UpdatePassenger',
+    async (passenger) => {
+        const res = await fetch(`https://localhost:7103/api/Passengers/UpdatePassenger`,
             {
-                method: 'GET',
-           
+                method: 'PUT',
+                body: JSON.stringify(passenger),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -17,7 +16,7 @@ export const getOrderByIdThank = createAsyncThunk(
         if (res.ok) {
             const data = await res.json();
             console.log("ffffffffffffffffff");
-            return data; 
+            return data;
         }
         else throw new Error("Failed to fetch");
     }

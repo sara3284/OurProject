@@ -1,0 +1,129 @@
+.orders-page {
+    font-family: 'Heebo', sans-serif;
+    direction: rtl;
+    padding: 20px;
+  }
+  
+  .orders-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .orders-title {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.8rem;
+  }
+  
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+  
+  .orders-table th,
+  .orders-table td {
+    padding: 12px 15px;
+    text-align: right;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .orders-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #555;
+  }
+  
+  .orders-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* עיצוב לטיסות שעברו */
+  .passed-flight {
+    background-color: #fff8f8;
+    color: #888;
+  }
+  
+  .passed-flight:hover {
+    background-color: #fff0f0;
+  }
+  
+  .status-passed {
+    color: #e74c3c;
+    font-weight: 600;
+  }
+  
+  .status-upcoming {
+    color: #2ecc71;
+    font-weight: 600;
+  }
+  
+  /* עיצוב כפתורים */
+  .edit-btn, .save-btn, .cancel-btn {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+  
+  .edit-btn {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .edit-btn:hover {
+    background-color: #2980b9;
+  }
+  
+  .edit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .save-btn {
+    background-color: #2ecc71;
+    color: white;
+    margin-left: 5px;
+  }
+  
+  .save-btn:hover {
+    background-color: #27ae60;
+  }
+  
+  .cancel-btn {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  .edit-actions {
+    display: flex;
+    gap: 5px;
+  }
+  
+  /* עיצוב שדות קלט */
+  input, select {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    font-family: 'Heebo', sans-serif;
+  }
+  
+  .no-orders {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+    font-size: 1.1rem;
+  }
+  

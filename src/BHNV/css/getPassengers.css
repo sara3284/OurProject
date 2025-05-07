@@ -1,0 +1,982 @@
+/* צבעים ומשתנים */
+:root {
+    --primary-color: #4ecdc4;
+    --secondary-color: #8aedb9;
+    --primary-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --accent-color: #ff6b6b;
+    --text-color: #2d3748;
+    --text-light: #718096;
+    --bg-color: #f7fafc;
+    --white: #ffffff;
+    --error-color: #e53e3e;
+    --success-color: #48bb78;
+    --warning-color: #ed8936;
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+    
+    /* סטטוס הזמנות */
+    --confirmed-color: #48bb78;
+    --pending-color: #ed8936;
+    --cancelled-color: #e53e3e;
+  }
+  
+  /* טעינת פונטים */
+  @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+  
+  /* סגנון בסיסי */
+  body {
+    font-family: 'Heebo', sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+    color: var(--text-color);
+  }
+  
+  .passengers-orders-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    position: relative;
+  }
+  
+  /* אנימציית רקע */
+  .background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(78, 205, 196, 0.05) 0%, rgba(78, 205, 196, 0) 70%);
+    z-index: -1;
+    opacity: 0.8;
+    animation: pulse 15s infinite alternate;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+  }
+  
+  /* כותרת עמוד */
+  .page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  .page-header p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin: 0;
+  }
+  
+  /* מבנה תוכן */
+  .content-wrapper {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+  }
+  
+  /* פאנל נוסעים */
+  .passengers-panel {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .panel-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .panel-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: var(--text-color);
+  }
+  
+  .search-bar {
+    position: relative;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 0.8rem 2.5rem 0.8rem 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    transition: var(--transition);
+  }
+  
+  .search-bar input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+  }
+  
+  .search-bar .material-icons {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+  }
+  
+  /* רשימת נוסעים */
+  .passengers-list {
+    overflow-y: auto;
+    padding: 1rem;
+    flex-grow: 1;
+  }
+  
+  .passenger-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    background-color: var(--white);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+  }
+  
+  .passenger-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-color: rgba(78, 205, 196, 0.3);
+  }
+  
+  .passenger-card.selected {
+    background-color: rgba(78, 205, 196, 0.1);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.2);
+  }
+  
+  .passenger-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-left: 1rem;
+  }
+  
+  .passenger-info {
+    flex-grow: 1;
+  }
+  
+  .passenger-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.3rem 0;
+    color: var(--text-color);
+  }
+  
+  .passenger-id {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .passenger-contact {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  
+  .passenger-contact span {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.2rem;
+  }
+  
+  .passenger-contact .material-icons {
+    font-size: 1rem;
+    margin-left: 0.3rem;
+  }
+  
+  .select-indicator {
+    opacity: 0;
+    transition: var(--transition);
+  }
+  
+  .passenger-card:hover .select-indicator,
+  .passenger-card.selected .select-indicator {
+    opacity: 1;
+  }
+  
+  .passenger-card.selected .select-indicator .material-icons {
+    color: var(--primary-color);
+  }
+  
+  /* אין תוצאות */
+  .no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+  
+  .no-results .material-icons {
+    font-size: 3rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+  }
+  
+  .no-results p {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  /* פאנל הזמנות */
+  .orders-panel {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header-title {
+    display: flex;
+    align-items: baseline;
+  }
+  
+  .order-count {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-right: 0.5rem;
+  }
+  
+
+    .filter-controls select {
+        padding: 0.5rem 1rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        transition: var(--transition);
+      }
+      
+      .filter-controls select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+      }
+      
+      /* תוכן הזמנות */
+      .orders-content {
+        overflow-y: auto;
+        padding: 1rem;
+        flex-grow: 1;
+      }
+      
+      /* רשימת הזמנות */
+      .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      
+      .order-card {
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+      }
+      
+      .order-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+      }
+      
+      .order-card.expanded {
+        box-shadow: var(--shadow-lg);
+      }
+      
+      /* סטטוס הזמנה */
+      .order-card.confirmed {
+        border-right: 4px solid var(--confirmed-color);
+      }
+      
+      .order-card.pending {
+        border-right: 4px solid var(--pending-color);
+      }
+      
+      .order-card.cancelled {
+        border-right: 4px solid var(--cancelled-color);
+      }
+      
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background-color: rgba(0, 0, 0, 0.02);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      
+      .order-id .label {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-left: 0.5rem;
+      }
+      
+      .order-id .value {
+        font-weight: 600;
+        color: var(--text-color);
+      }
+      
+      .status-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+      
+      .status-badge.confirmed {
+        background-color: rgba(72, 187, 120, 0.1);
+        color: var(--confirmed-color);
+      }
+      
+      .status-badge.pending {
+        background-color: rgba(237, 137, 54, 0.1);
+        color: var(--pending-color);
+      }
+      
+      .status-badge.cancelled {
+        background-color: rgba(229, 62, 62, 0.1);
+        color: var(--cancelled-color);
+      }
+      
+      /* סיכום הזמנה */
+      .order-summary {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 1rem;
+        padding: 1.5rem;
+        cursor: pointer;
+      }
+      
+      .flight-info {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .destination {
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      
+      .destination .material-icons {
+        margin-left: 0.5rem;
+        color: var(--primary-color);
+      }
+      
+      .flight-number {
+        font-size: 0.9rem;
+      }
+      
+      .flight-number .label {
+        color: var(--text-light);
+        margin-left: 0.3rem;
+      }
+      
+      .order-dates {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .date {
+        font-size: 0.9rem;
+      }
+      
+      .date .label {
+        color: var(--text-light);
+        margin-left: 0.3rem;
+      }
+      
+      .order-price {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+      }
+      
+      .price-value {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-color);
+      }
+      
+      .passengers-count {
+        font-size: 0.85rem;
+        color: var(--text-light);
+      }
+      
+      /* פרטי הזמנה מורחבים */
+      .order-details {
+        padding: 0 1.5rem 1.5rem;
+        border-top: 1px dashed rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.3s ease;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .details-section {
+        margin-top: 1.5rem;
+      }
+      
+      .details-section h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 1rem 0;
+        color: var(--text-color);
+        display: flex;
+        align-items: center;
+      }
+      
+      .details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+      
+      .detail-item {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .detail-item .label {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-bottom: 0.3rem;
+      }
+      
+      .detail-item .value {
+        font-size: 0.95rem;
+        color: var(--text-color);
+      }
+      
+      /* פרטי טיסה */
+      .flight-details {
+        background-color: var(--bg-color);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+      }
+      
+      .flight-route {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+      }
+      
+      .origin, .destination {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-color);
+      }
+      
+      .flight-path {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        margin: 0 1rem;
+      }
+      
+      .airplane-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        background: var(--primary-gradient);
+        border-radius: 50%;
+        z-index: 1;
+        animation: moveAirplane 3s infinite;
+      }
+      
+      @keyframes moveAirplane {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+      
+      .airplane-icon .material-icons {
+        color: var(--white);
+        font-size: 1.2rem;
+      }
+      
+      .path-line {
+        flex-grow: 1;
+        height: 2px;
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        position: relative;
+      }
+      
+      .path-line::before,
+      .path-line::after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        top: -1px;
+      }
+      
+      .path-line::before {
+        left: 20%;
+      }
+      
+      .path-line::after {
+        right: 20%;
+      }
+      
+      .flight-times {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      
+      .time-item {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .time-item .label {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-bottom: 0.3rem;
+      }
+      
+      .time-item .value {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-color);
+      }
+      
+      /* פרטי נוסעים */
+      .passengers-details {
+        background-color: var(--bg-color);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+      }
+      
+      .passenger-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 0.8rem;
+        margin-bottom: 0.8rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      
+      .passenger-name {
+        font-weight: 500;
+        color: var(--text-color);
+      }
+      
+      .passenger-type {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        background-color: rgba(0, 0, 0, 0.05);
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+      }
+      
+      .additional-passengers {
+        font-size: 0.9rem;
+        color: var(--text-light);
+      }
+      
+      /* כפתורי פעולה */
+      .order-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        justify-content: flex-end;
+      }
+      
+      .action-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+      }
+      
+      .action-button .material-icons {
+        margin-left: 0.5rem;
+        font-size: 1.1rem;
+      }
+      
+      .action-button:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      
+      .action-button.print {
+        background-color: var(--primary-color);
+        color: var(--white);
+      }
+      
+      .action-button.print:hover {
+        background-color: #3db9b1;
+      }
+      
+      .action-button.cancel {
+        background-color: rgba(229, 62, 62, 0.1);
+        color: var(--cancelled-color);
+      }
+      
+      .action-button.cancel:hover {
+        background-color: rgba(229, 62, 62, 0.2);
+      }
+      
+      .action-button.contact {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      
+      .action-button.contact:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      
+      /* אין הזמנות */
+      .no-orders {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        text-align: center;
+      }
+      
+      .no-orders .material-icons {
+        font-size: 3rem;
+        color: var(--text-light);
+        margin-bottom: 1rem;
+      }
+      
+      .no-orders p {
+        color: var(--text-light);
+        font-size: 1rem;
+        margin: 0 0 1.5rem 0;
+      }
+      
+      .no-orders .action-button {
+        background-color: var(--primary-color);
+        color: var(--white);
+      }
+      
+      .no-orders .action-button:hover {
+        background-color: #3db9b1;
+      }
+      
+      /* אין נוסע נבחר */
+      .no-passenger-selected {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 2rem;
+        text-align: center;
+      }
+      
+      .no-passenger-selected .illustration {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: rgba(78, 205, 196, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+      }
+      
+      .no-passenger-selected .material-icons {
+        font-size: 4rem;
+        color: var(--primary-color);
+      }
+      
+      .no-passenger-selected h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin: 0 0 0.5rem 0;
+      }
+      
+      .no-passenger-selected p {
+        font-size: 1rem;
+        color: var(--text-light);
+        margin: 0;
+        max-width: 400px;
+      }
+      
+      /* טעינה */
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+      }
+      
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(78, 205, 196, 0.1);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+      
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      
+      .loading-container p {
+        color: var(--text-light);
+        font-size: 1rem;
+        margin: 0;
+      }
+      
+      /* הודעת שגיאה */
+      .error-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        text-align: center;
+      }
+      
+      .error-message .material-icons {
+        font-size: 3rem;
+        color: var(--error-color);
+        margin-bottom: 1rem;
+      }
+      
+      .error-message p {
+        color: var(--text-color);
+        font-size: 1rem;
+        margin: 0;
+      }
+      
+      /* רספונסיביות */
+      @media (max-width: 1200px) {
+        .content-wrapper {
+          grid-template-columns: 300px 1fr;
+        }
+      }
+      
+      .edit-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+      }
+      
+      .edit-modal {
+        background-color: var(--white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideIn 0.3s ease;
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      
+      .modal-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+        color: var(--text-color);
+      }
+      
+      .close-modal-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-light);
+        transition: var(--transition);
+      }
+      
+      .close-modal-button:hover {
+        color: var(--accent-color);
+      }
+      
+      .edit-form {
+        padding: 1.5rem;
+      }
+      
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      
+      .form-group label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: var(--text-color);
+      }
+      
+      .form-group input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        font-size: 1rem;
+        color: var(--text-color);
+        transition: var(--transition);
+      }
+      
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+      }
+      
+      .form-group input:disabled {
+        background-color: rgba(0, 0, 0, 0.05);
+        cursor: not-allowed;
+      }
+      
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      
+      .cancel-button, .save-button {
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      
+      .cancel-button {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      
+      .cancel-button:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      
+      .save-button {
+        background-color: var(--primary-color);
+        color: var(--white);
+        border: none;
+      }
+      
+      .save-button:hover {
+        background-color: #3db9b1;
+      }

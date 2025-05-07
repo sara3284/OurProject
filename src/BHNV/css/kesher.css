@@ -1,0 +1,506 @@
+:root {
+    --primary-color: #4ecdc4;
+    --secondary-color: #8aedb9;
+    --primary-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --accent-color: #ff6b6b;
+    --text-color: #2d3748;
+    --text-light: #718096;
+    --bg-color: #f7fafc;
+    --white: #ffffff;
+    --error-color: #e53e3e;
+    --success-color: #48bb78;
+    --warning-color: #ed8936;
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+  }
+  
+  /* טעינת פונטים */
+  @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+  
+  /* סגנון בסיסי */
+  body {
+    font-family: 'Heebo', sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+    color: var(--text-color);
+  }
+  
+  /* אנימציית רקע */
+  .background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(78, 205, 196, 0.05) 0%, rgba(78, 205, 196, 0) 70%);
+    z-index: -1;
+    opacity: 0.8;
+    animation: pulse 15s infinite alternate;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+  }
+  
+  /* עמוד צור קשר */
+  .contact-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .contact-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.8s ease;
+  }
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .contact-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .contact-header h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
+  }
+  
+  .contact-header p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .contact-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+  
+  /* פאנל פרטי התקשרות */
+  .contact-info-panel {
+    background: var(--primary-gradient);
+    color: var(--white);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .contact-info-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+    background-size: cover;
+  }
+  
+  .info-header {
+    position: relative;
+    margin-bottom: 2.5rem;
+  }
+  
+  .info-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+  }
+  
+  .info-header p {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+  
+  .info-items {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .info-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+    transition: var(--transition);
+  }
+  
+  .info-item:hover .info-icon {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
+  
+  .info-icon i {
+    font-size: 1.2rem;
+  }
+  
+  .info-content {
+    flex-grow: 1;
+  }
+  
+  .info-content h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.3rem 0;
+  }
+  
+  .info-content p, .info-content a {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin: 0;
+    color: var(--white);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  
+  .info-content a:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+  
+  /* חלק הרשתות החברתיות */
+  .social-links {
+    position: relative;
+  }
+  
+  .social-links h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  
+  .social-icon:hover {
+    transform: translateY(-5px);
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .social-icon i {
+    font-size: 1.2rem;
+  }
+  
+  /* פאנל טופס יצירת קשר */
+  .contact-form-panel {
+    background-color: var(--white);
+    padding: 2.5rem;
+  }
+  
+  .form-header {
+    margin-bottom: 2rem;
+  }
+  
+  .form-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .form-header p {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin: 0;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  .required {
+    color: var(--accent-color);
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: var(--transition);
+    font-family: 'Heebo', sans-serif;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+  }
+  
+  .form-group input.error,
+  .form-group select.error,
+  .form-group textarea.error {
+    border-color: var(--error-color);
+  }
+  
+  .error-message {
+    color: var(--error-color);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .submit-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-gradient);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+  }
+  
+  .submit-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .submit-button i {
+    font-size: 1.2rem;
+  }
+  
+  /* הודעת הצלחה */
+  .form-success-message {
+    text-align: center;
+    padding: 2rem;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(72, 187, 120, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem auto;
+    color: var(--success-color);
+  }
+  
+  .success-icon i {
+    font-size: 3rem;
+  }
+  
+  .form-success-message h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 1rem 0;
+  }
+  
+  .form-success-message p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin: 0 0 2rem 0;
+  }
+  
+  .new-message-button {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .new-message-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  /* חלק המפה */
+  .map-section {
+    margin-bottom: 3rem;
+  }
+  
+  .map-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+  }
+  
+  .map-container {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  
+  /* חלק השאלות הנפוצות */
+  .faq-section {
+    margin-bottom: 3rem;
+  }
+  
+  .faq-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+  }
+  
+  .faq-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .faq-item {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+  }
+  
+  .faq-item:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+  }
+  
+  .faq-question {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .faq-question h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+  }
+  
+  .faq-question i {
+    color: var(--text-light);
+    transition: var(--transition);
+  }
+  
+  .faq-item:hover .faq-question i {
+    color: var(--primary-color);
+  }
+  
+  .faq-answer {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+  }
+  

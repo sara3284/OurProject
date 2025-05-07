@@ -7,6 +7,9 @@ import { getOrderByIdThank } from "./getOrderByIdThank";
 import { addOrderThank } from "./addOrderThank";
 import { getFlightsThank } from "./getFlightsThank";
 import { getOrdersThank } from "./getOrdersThank";
+import { GetPassengersThank } from "./getPassengersThank";
+import { getOrders_Flights } from "./getOrders_Flights";
+import { UpdatePassenger } from "./updatePassenger";
 
 export const INITIALSTATE = {
     orders: [{
@@ -17,12 +20,12 @@ export const INITIALSTATE = {
         orderdetails: [
             {
                 orderCode: 0,
-                numOfTickets: 0,
-                numClass: 0
+                NumOfTicketsForFirstClass: 0,
+                NumOfTicketsForRegilerClass: 0
             }
         ]
     }],
-    Orders_Flights: [{
+    Orders_Flights: {
         orderslist: [{
             code: 0,
             numOfFlight: 0,
@@ -55,14 +58,14 @@ export const INITIALSTATE = {
             numOfEmptySeetsInRegilerClass: ""
         }]
     }
-    ],
+    ,
     passenger: [{
         id: "",
         name: "",
         birthDate: "",
         phone: "",
         city: "",
-        age: 20
+        age: 0
     }],
     flights: [{
         numOfFlight: 0,
@@ -126,6 +129,10 @@ export const flightsSlice = createSlice({
 
             state.orders = action.payload;
         });
+        builder.addCase(getOrders_Flights.fulfilled, (state, action) => {
+
+            state.Orders_Flights = action.payload;
+        });
         builder.addCase(addOrderThank.fulfilled, (state, action) => {
             state.orders = action.payload;
             console.log("success");
@@ -135,9 +142,17 @@ export const flightsSlice = createSlice({
 
             state.flights = action.payload;
         });
+        builder.addCase(GetPassengersThank.fulfilled, (state, action) => {
+
+            state.passenger = action.payload;
+        });
         builder.addCase(getOrdersThank.fulfilled, (state, action) => {
 
             state.orders = action.payload;
+        });
+        builder.addCase(UpdatePassenger.fulfilled, (state, action) => {
+            state.passenger = action.payload;
+
         });
     }
 });

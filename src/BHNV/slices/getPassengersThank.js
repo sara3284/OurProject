@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 
-export const getThank = createAsyncThunk(
-    'getThank',
+export const GetPassengersThank = createAsyncThunk(
+    'getPassengersThank',
     async () => {
-        const res = await fetch(`https://localhost:7103/api/Flights/GetAll`)
+        const res = await fetch(`https://localhost:7103/api/Passengers/GetAll`)
         if (res.ok) {
             const data = await res.json();
             return data; // להחזיר את data ישירות, לא data.flights

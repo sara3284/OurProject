@@ -1,0 +1,178 @@
+/* צבעים אחידים ונקיים */
+:root {
+    --primary-color: #4ecdc4; /* תכלת בהיר */
+    --secondary-color: #8aedb9; /* ירוק בהיר */
+    --primary-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --text-color: #2d3748;
+    --text-light: #718096;
+    --bg-color: #f7fafc;
+    --white: #ffffff;
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+    
+  }
+  
+  /* טעינת פונטים */
+  @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+  
+  .about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    font-family: 'Heebo', sans-serif;
+    color: var(--text-color);
+    direction: rtl;
+  }
+  
+  .about-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .about-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+  }
+  
+  .about-divider {
+    height: 4px;
+    width: 80px;
+    background: var(--primary-gradient);
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+  
+  .about-content {
+    margin-bottom: 4rem;
+  }
+  
+  /* מי אנחנו */
+  .about-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+  
+  @media (min-width: 768px) {
+    .about-section {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+  
+  .about-image-container {
+    flex: 1;
+    position: relative;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  
+  .about-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  
+  .about-image-container:hover .about-image {
+    transform: scale(1.05);
+  }
+  
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(78, 205, 196, 0.1), rgba(138, 237, 185, 0.3));
+  }
+  
+  .about-text {
+    flex: 1;
+    padding: 1rem;
+  }
+  
+  .about-text h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    position: relative;
+    padding-right: 1rem;
+  }
+  
+  .about-text h2:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0.5rem;
+    height: 70%;
+    width: 4px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
+  }
+  
+  .about-text p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+    color: var(--text-light);
+  }
+  
+  /* למה לבחור בנו */
+  .about-features {
+    margin-bottom: 4rem;
+  }
+  
+  .features-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+    color: var(--text-color);
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .feature-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    text-align: center;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+  }
+  
+  .feature-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  
+  .feature-icon .material-icons {
+    font-size: 2rem;
+    color: var(--white);
+  }
+  
+ 
