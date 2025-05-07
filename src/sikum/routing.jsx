@@ -14,6 +14,7 @@ import { GetOrders } from '../BHNV/components/getOrders';
 import { Above } from '../BHNV/components/above';
 import { GetPassengers, PassengersOrders } from '../BHNV/components/getPassengers';
 import { Kesher } from '../BHNV/components/kesher';
+import { GetDetails } from '../BHNV/components/getDetails';
 
 
 export const Routing = () => {
@@ -33,6 +34,7 @@ export const Routing = () => {
        <Route path="above" element={<Above/>} />
        <Route path="pay" element={<Pay/>} />
        <Route path="getPassengers" element={<GetPassengers/>} />
+       <Route path="getDetails" element={<GetDetails/>} />
        <Route path="kesher" element={<Kesher/>} />
         </Routes>
      

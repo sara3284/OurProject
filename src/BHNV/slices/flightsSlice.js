@@ -9,6 +9,7 @@ import { getFlightsThank } from "./getFlightsThank";
 import { getOrdersThank } from "./getOrdersThank";
 import { GetPassengersThank } from "./getPassengersThank";
 import { getOrders_Flights } from "./getOrders_Flights";
+import { UpdatePassenger } from "./updatePassenger";
 
 export const INITIALSTATE = {
     orders: [{
@@ -19,8 +20,8 @@ export const INITIALSTATE = {
         orderdetails: [
             {
                 orderCode: 0,
-                numOfTickets: 0,
-                numClass: 0
+                NumOfTicketsForFirstClass: 0,
+                NumOfTicketsForRegilerClass: 0
             }
         ]
     }],
@@ -148,6 +149,10 @@ export const flightsSlice = createSlice({
         builder.addCase(getOrdersThank.fulfilled, (state, action) => {
 
             state.orders = action.payload;
+        });
+        builder.addCase(UpdatePassenger.fulfilled, (state, action) => {
+            state.passenger = action.payload;
+
         });
     }
 });

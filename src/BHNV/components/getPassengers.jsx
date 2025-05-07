@@ -85,7 +85,7 @@ import { getOrderByIdThank } from "../slices/getOrderByIdThank";
 export const GetPassengers = () => {
     const passenger = useSelector(state => state.event.passenger);
     const flights = useSelector(state => state.event.flights);
-    const passengerOrders = useSelector(state => state.event.passengerOrders || []);
+    const passengerOrders = useSelector(state => state.event.orders);
 
     const dispatch = useDispatch();
     const [company, setcompany] = useState("");
@@ -361,14 +361,14 @@ export const GetPassengers = () => {
                                         <div className="order-header">
                                             <div className="order-id">
                                                 <span className="label">מספר הזמנה:</span>
-                                                <span className="value">{order.id}</span>
+                                                <span className="value">{order.code}</span>
                                             </div>
                                             <div className="order-status">
-                                                <span className={`status-badge ${order.status}`}>
+                                                {/* <span className={`status-badge ${order.status}`}>
                                                     {order.status === 'confirmed' && 'מאושרת'}
                                                     {order.status === 'pending' && 'ממתינה'}
                                                     {order.status === 'cancelled' && 'מבוטלת'}
-                                                </span>
+                                                </span> */}
                                             </div>
                                         </div>
 
@@ -376,34 +376,38 @@ export const GetPassengers = () => {
                                             <div className="detail-row">
                                                 <div className="detail-item">
                                                     <span className="label">מספר טיסה:</span>
-                                                    <span className="value">{order.flightNumber}</span>
+                                                    <span className="value">{order.numOfFlight}</span>
                                                 </div>
-                                                <div className="detail-item">
+                                                {/* <div className="detail-item">
                                                     <span className="label">יעד:</span>
                                                     <span className="value">{order.destination}</span>
-                                                </div>
+                                                </div> */}
                                             </div>
 
                                             <div className="detail-row">
-                                                <div className="detail-item">
+                                                {/* <div className="detail-item">
                                                     <span className="label">תאריך יציאה:</span>
                                                     <span className="value">{formatDate(order.departureDate)}</span>
-                                                </div>
-                                                <div className="detail-item">
+                                                </div> */}
+                                                {/* <div className="detail-item">
                                                     <span className="label">תאריך חזרה:</span>
                                                     <span className="value">{formatDate(order.returnDate)}</span>
-                                                </div>
+                                                </div> */}
                                             </div>
 
                                             <div className="detail-row">
                                                 <div className="detail-item">
-                                                    <span className="label">מחלקה:</span>
-                                                    <span className="value">{order.classType}</span>
+                                                    <span className="label">מספר כרטיסים למחלקה ראשונה:</span>
+                                                    <span className="value">{order.numOfTicketsForFirstClass}</span>
                                                 </div>
                                                 <div className="detail-item">
+                                                    <span className="label">מספר כרטיסים למחלקה רגילה:</span>
+                                                    <span className="value">{order.numOfTicketsForRegilerClass}</span>
+                                                </div>
+                                                {/* <div className="detail-item">
                                                     <span className="label">מחיר:</span>
                                                     <span className="value price">{order.totalPrice} ₪</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
 

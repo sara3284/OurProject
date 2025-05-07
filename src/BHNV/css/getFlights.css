@@ -528,3 +528,503 @@
   .flights-table tbody tr:nth-child(8) { animation-delay: 0.4s; }
   .flights-table tbody tr:nth-child(9) { animation-delay: 0.45s; }
   .flights-table tbody tr:nth-child(10) { animation-delay: 0.5s; }
+  .seat-selector {
+    margin-top: 10px;
+}
+
+.seat-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.seat-controls button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.seat-controls button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.seat-controls span {
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+}
+/* חלוניות מודאליות - בסיס משותף */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+/* חלונית תשלום */
+.payment-modal {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  direction: rtl;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  background-color: #f8f9fa;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.5rem;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7f8c8d;
+  font-size: 1.5rem;
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: #e74c3c;
+}
+
+.payment-details {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .payment-details {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flight-summary, .order-summary, .payment-form {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.payment-form {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .payment-form {
+    grid-column: span 1;
+  }
+}
+
+.flight-summary h4, .order-summary h4, .payment-form h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #3498db;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #ccc;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.payment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding: 20px;
+  border-top: 1px solid #eee;
+  background-color: #f8f9fa;
+  border-radius: 0 0 12px 12px;
+}
+
+.cancel-button, .confirm-button {
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cancel-button {
+  background-color: #f1f2f6;
+  color: #2c3e50;
+  border: 1px solid #ddd;
+}
+
+.cancel-button:hover {
+  background-color: #e9ecef;
+}
+
+.confirm-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+}
+
+.confirm-button:hover {
+  background-color: #2980b9;
+}
+
+.confirm-button i {
+  font-size: 1.2rem;
+}
+
+/* חלונית אישור הזמנה */
+.confirmation-modal {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px;
+  padding: 30px;
+  text-align: center;
+  direction: rtl;
+  animation: modalBounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.confirmation-icon {
+  font-size: 5rem;
+  color: #2ecc71;
+  margin-bottom: 20px;
+  animation: iconPulse 1s ease-in-out;
+}
+
+.confirmation-modal h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.confirmation-details {
+  text-align: right;
+  margin: 20px 0;
+  color: #34495e;
+  line-height: 1.6;
+}
+
+.confirmation-details p {
+  margin-bottom: 10px;
+}
+
+.confirmation-details strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.ticket-summary {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px 0;
+  border: 1px dashed #3498db;
+  position: relative;
+}
+
+.ticket-summary:before, .ticket-summary:after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-summary:before {
+  left: -10px;
+  box-shadow: inset 3px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-summary:after {
+  right: -10px;
+  box-shadow: inset -3px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px dashed #ccc;
+}
+
+.company-logo {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #3498db;
+}
+
+.flight-number {
+  font-weight: 500;
+  color: #7f8c8d;
+}
+
+.ticket-route {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.departure, .arrival {
+  text-align: center;
+}
+
+.city-code {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.time {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.route-line {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: 0 15px;
+}
+
+.route-line:before {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background-color: #e0e0e0;
+  z-index: 1;
+}
+
+.route-line i {
+  background-color: #f8f9fa;
+  padding: 0 10px;
+  color: #3498db;
+  position: relative;
+  z-index: 2;
+  transform: rotate(90deg);
+}
+
+.ticket-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed #ccc;
+}
+
+.detail-column {
+  flex: 1;
+}
+
+.detail-item {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.detail-item .label {
+  color: #7f8c8d;
+  margin-left: 5px;
+}
+
+.detail-item .value {
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.confirmation-message {
+  color: #7f8c8d;
+  font-style: italic;
+}
+
+.close-confirmation {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 20px;
+}
+
+.close-confirmation:hover {
+  background-color: #2980b9;
+}
+
+/* אנימציות */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalBounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes iconPulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* עיצוב לטיסות שתאריכן עבר */
+.passed-flight {
+  opacity: 0.6;
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.passed-flight:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.passed-flight td {
+  position: relative;
+}
+
+.passed-flight-indicator {
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.passed-flight::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.05) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.05) 75%, transparent 75%, transparent);
+  background-size: 8px 8px;
+  pointer-events: none;
+}
+
+.passed-flight .price-info, 
+.passed-flight .company-info,
+.passed-flight .direct-flight,
+.passed-flight .stop-flight {
+  text-decoration: line-through;
+}

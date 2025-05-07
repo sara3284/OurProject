@@ -190,14 +190,9 @@ export const Home = () => {
             icon: 'flight',
             description: 'חיפוש וסינון טיסות זמינות'
         },
+        
         {
-            path: '/pay',
-            text: 'לתשלום',
-            icon: 'payments',
-            description: 'ביצוע תשלום מאובטח עבור ההזמנות שלך'
-        },
-        {
-            path: '/details',
+            path: '/getDetails',
             text: 'הפרטים שלי',
             icon: 'person',
             description: 'צפייה ועדכון הפרטים האישיים שלך'
