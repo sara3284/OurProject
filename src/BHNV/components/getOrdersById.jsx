@@ -22,6 +22,7 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
 
   useEffect(() => {
     if (passenger && passenger.id) {
+      debugger
       dispatch(getOrders_Flights(passenger.id));
     }
   }, [dispatch, passenger]);
@@ -46,7 +47,7 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
 
   // פונקציה למציאת פרטי הטיסה לפי מספר טיסה
   const findFlightByNumber = (flightNumber) => {
-    debugger
+    
     return Orders_Flights.flightslist.find(flight => flight.numOfFlight === flightNumber);
   };
 
@@ -108,7 +109,7 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
                 <th>מספר טיסה</th>
                 <th>תאריך הזמנה</th>
                 <th>מספר כרטיסים למחלקה ראשונה</th>
-                <th>מספר כרטיסים למחלקה שניה</th>
+                <th>מספר כרטיסים למחלקה רגילה</th>
                 <th>יעד</th>
                 <th>מוצא</th>
                 <th>חברה</th>
@@ -126,7 +127,7 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
                 if (!order || typeof order !== 'object') return null;
                 
                 // מצא את הטיסה המתאימה להזמנה זו
-                debugger
+                
                 const flight = findFlightByNumber(order.numOfFlight);
                 
                 // בדיקה שיש פרטי הזמנה
@@ -237,7 +238,10 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
                   // });
                 } else {
                   // אם orderdetails הוא אובייקט בודד, טפל בו ישירות
+                  debugger
                   const detail = order.orderdetails;
+                  // {detail && console.log(detail.NumOfTicketsForFirstClass)}
+                  
                   const isPassed = flight && isFlightPassed(flight.date, flight.departureTime);
 
                   return (
@@ -275,8 +279,8 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
                         </>
                       ) : (
                         <>
-                          <td>{detail.NumOfTicketsForFirstClass + detail.NumOfTicketsForRegilerClass}</td>
-                          <td>{detail.NumOfTicketsForFirstClass > 0 ? "מחלקה ראשונה" : "מחלקה רגילה"}</td>
+                          <td>{order.orderdetails?.numOfTicketsForFirstClass || 0}</td>
+                          <td>{order.orderdetails?.NumOfTicketsForRegilerClass || 0}</td>
                         </>
                       )}
 
