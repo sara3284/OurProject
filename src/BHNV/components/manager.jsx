@@ -140,7 +140,7 @@ export const Manager = () => {
                         </div>
                     </Link>
                     
-                    <Link to='/getFlights' className="action-card">
+                    <Link to='/getManagerFlights' className="action-card">
                         <div className="action-icon">
                             <i className="material-icons">flight</i>
                         </div>

@@ -29,11 +29,11 @@ export const GetFlights = () => {
         numOfFlight: 0,
         passengerId: "",
         date: "",
-        orderdetails: [{ 
+        orderdetails: { 
             orderCode: 0,
             NumOfTicketsForFirstClass: 0,
             NumOfTicketsForRegilerClass: 0 
-        }]
+        }
     });
 
     useEffect(() => {
@@ -65,11 +65,11 @@ export const GetFlights = () => {
             numOfFlight: selectedFlight.numOfFlight,
             passengerId: passenger.id,
             date: new Date().toISOString().slice(0, 10),
-            orderdetails: [{
+            orderdetails: {
                 orderCode: 0,
                 NumOfTicketsForFirstClass: firstClassSeats,
                 NumOfTicketsForRegilerClass: regularClassSeats
-            }]
+            }
         };
 
         // עדכון המצב ופתיחת חלונית התשלום
@@ -80,7 +80,7 @@ export const GetFlights = () => {
     const handlePaymentComplete = () => {
         // שליחת ההזמנה לשרת
         dispatch(addOrderThank(selectedOrder));
-        
+
         // סגירת חלונית התשלום והצגת אישור ההזמנה
         setShowPaymentModal(false);
         setShowConfirmation(true);

@@ -398,11 +398,11 @@ export const GetPassengers = () => {
                                             <div className="detail-row">
                                                 <div className="detail-item">
                                                     <span className="label">מספר כרטיסים למחלקה ראשונה:</span>
-                                                    <span className="value">{order.numOfTicketsForFirstClass}</span>
+                                                    <span className="value">{order.orderdetails?.numOfTicketsForFirstClass || 0}</span>
                                                 </div>
                                                 <div className="detail-item">
                                                     <span className="label">מספר כרטיסים למחלקה רגילה:</span>
-                                                    <span className="value">{order.numOfTicketsForRegilerClass}</span>
+                                                    <span className="value">{order.orderdetails?.numOfTicketsForRegilerClass || 0}</span>
                                                 </div>
                                                 {/* <div className="detail-item">
                                                     <span className="label">מחיר:</span>
@@ -411,7 +411,7 @@ export const GetPassengers = () => {
                                             </div>
                                         </div>
 
-                                        <div className="order-actions">
+                                        {/* <div className="order-actions">
                                             <button className="action-button view-details">
                                                 <i className="material-icons">visibility</i>
                                                 פרטים מלאים
@@ -423,7 +423,7 @@ export const GetPassengers = () => {
                                                     ביטול הזמנה
                                                 </button>
                                             )}
-                                        </div>
+                                        </div> */}
                                     </div>
                                 ))}
                             </div>

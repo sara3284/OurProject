@@ -1028,3 +1028,130 @@
 .passed-flight .stop-flight {
   text-decoration: line-through;
 }
+
+/* עיצוב תא תעודת הזהות בטבלה */
+.passenger-id-cell {
+  cursor: pointer;
+  color: #3498db;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.passenger-id-cell:hover {
+  color: #2980b9;
+}
+
+/* חלונית פרטי נוסע */
+.passenger-details-modal {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px;
+  overflow: hidden;
+  direction: rtl;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.passenger-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.passenger-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.passenger-avatar .material-icons {
+  font-size: 64px;
+  color: #3498db;
+  background-color: #f1f9fe;
+  border-radius: 50%;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.passenger-id {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  background-color: #f8f9fa;
+  padding: 5px 15px;
+  border-radius: 20px;
+  border: 1px dashed #ddd;
+}
+
+.passenger-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.detail-group {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  border-right: 3px solid #3498db;
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-bottom: 5px;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.modal-footer {
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid #eee;
+  background-color: #f8f9fa;
+}
+
+.close-modal-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.close-modal-button:hover {
+  background-color: #2980b9;
+}
+
+/* אנימציה לחלונית */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 768px) {
+  .passenger-details-grid {
+    grid-template-columns: 1fr;
+  }
+}

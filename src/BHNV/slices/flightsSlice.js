@@ -10,6 +10,8 @@ import { getOrdersThank } from "./getOrdersThank";
 import { GetPassengersThank } from "./getPassengersThank";
 import { getOrders_Flights } from "./getOrders_Flights";
 import { UpdatePassenger } from "./updatePassenger";
+import { getCompanyThank } from "./getCompanyThank";
+import { UpdateFlight, updateFlightThank } from "./updateFlightThank";
 
 export const INITIALSTATE = {
     orders: [{
@@ -17,13 +19,13 @@ export const INITIALSTATE = {
         numOfFlight: 0,
         passengerId: "",
         date: "",
-        orderdetails: [
+        orderdetails: 
             {
                 orderCode: 0,
                 NumOfTicketsForFirstClass: 0,
                 NumOfTicketsForRegilerClass: 0
             }
-        ]
+        
     }],
     Orders_Flights: {
         orderslist: [{
@@ -31,13 +33,13 @@ export const INITIALSTATE = {
             numOfFlight: 0,
             passengerId: "",
             date: "",
-            orderdetails: [
+            orderdetails: 
                 {
                     orderCode: 0,
-                    numOfTickets: 0,
-                    numClass: 0
+                    NumOfTicketsForFirstClass: 0,
+                    NumOfTicketsForRegilerClass: 0
                 }
-            ]
+            
         }],
         flightslist: [{
             numOfFlight: 0,
@@ -82,8 +84,12 @@ export const INITIALSTATE = {
         numOfSeetsInRegilerClass: 0,
         isDirect: true,
         stop: "",
-        numOfEmptySeetsInFirstClass: "",
-        numOfEmptySeetsInRegilerClass: ""
+        numOfEmptySeetsInFirstClass: 0,
+        numOfEmptySeetsInRegilerClass: 0
+    }],
+    companies:[{
+        companyCode:0,
+        companyName: "",
     }],
     bool: null,
     id: "",
@@ -111,6 +117,9 @@ export const flightsSlice = createSlice({
         });
         builder.addCase(getByCompanyThank.fulfilled, (state, action) => {
             state.flights = action.payload;
+        });
+        builder.addCase(getCompanyThank.fulfilled, (state, action) => {
+            state.companies = action.payload;
         });
         builder.addCase(loginThank.fulfilled, (state, action) => {
             state.flights = action.payload;
@@ -152,6 +161,10 @@ export const flightsSlice = createSlice({
         });
         builder.addCase(UpdatePassenger.fulfilled, (state, action) => {
             state.passenger = action.payload;
+
+        });
+        builder.addCase(updateFlightThank.fulfilled, (state, action) => {
+            state.bool = action.payload;
 
         });
     }
