@@ -181,6 +181,38 @@ export const Manager = () => {
                 </div>
             </div>
             
+            {/* הוספת אפשרויות חברה */}
+            <div className="company-management-section">
+                <h2>ניהול חברות תעופה</h2>
+                <div className="quick-actions">
+                    <Link to='/addOrder' className="action-card">
+                        <div className="action-icon">
+                            <i className="material-icons">add_circle</i>
+                        </div>
+                        <div className="action-content">
+                            <h3>הוספת הזמנה</h3>
+                            <p>הוספת הזמנה חדשה למערכת</p>
+                        </div>
+                        <div className="action-arrow">
+                            <i className="material-icons">arrow_forward</i>
+                        </div>
+                    </Link>
+                    
+                    <Link to='/manageCompanies' className="action-card">
+                        <div className="action-icon">
+                            <i className="material-icons">business</i>
+                        </div>
+                        <div className="action-content">
+                            <h3>ניהול חברות</h3>
+                            <p>צפייה ועריכה של חברות התעופה</p>
+                        </div>
+                        <div className="action-arrow">
+                            <i className="material-icons">arrow_forward</i>
+                        </div>
+                    </Link>
+                </div>
+            </div>
+            
             <div className="dashboard-sections">
                 <div className="recent-activity">
                     <div className="section-header">
