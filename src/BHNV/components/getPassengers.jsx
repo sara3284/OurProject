@@ -81,6 +81,7 @@ import { Manager } from "./manager";
 import '../css/getPassengers.css';
 import { GetPassengersThank } from "../slices/getPassengersThank";
 import { getOrderByIdThank } from "../slices/getOrderByIdThank";
+import { updatePassenger } from "../slices/updatePassenger";
 
 export const GetPassengers = () => {
     const passenger = useSelector(state => state.event.passenger);
@@ -111,6 +112,11 @@ export const GetPassengers = () => {
             [name]: value
         });
     };
+
+    const saveChanges = () => {
+        dispatch(updatePassenger(editFormData));
+
+    }
 
     const handleEditSubmit = (e) => {
         e.preventDefault();
@@ -529,7 +535,7 @@ export const GetPassengers = () => {
                             <button type="button" className="cancel-button" onClick={() => setShowEditModal(false)}>
                                 ביטול
                             </button>
-                            <button type="submit" className="save-button">
+                            <button type="submit" className="save-button" onClick={()=>saveChanges()}>
                                 שמירת שינויים
                             </button>
                         </div>

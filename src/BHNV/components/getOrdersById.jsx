@@ -5,6 +5,8 @@ import { Home } from "./home";
 import { getFlightsThank } from "../slices/getFlightsThank";
 import { getOrders_Flights } from "../slices/getOrders_Flights";
 import "../css/getOrdersFlights.css";
+import { updateOrderThank } from "../slices/updateOrderThank";
+import { deleteOrderThank } from "../slices/deleteOrderThank";
 
 export const GetOrderById = () => {
   const passenger = useSelector(state => state.event.passenger);
@@ -14,11 +16,12 @@ export const GetOrderById = () => {
   // מצב לעריכת הזמנה
   const [editingOrder, setEditingOrder] = useState(null);
   const [editFormData, setEditFormData] = useState({
-    numOfTickets: 0,
-    numClass: 0
+    numOfFlight: 0,
+    // numOfTicketsForFirstClass: 0,
+    // numOfTicketsForRegilerClass: 0
   });
   const [showEditModal, setShowEditModal] = useState(false);
-const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
+  const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
 
   useEffect(() => {
     if (passenger && passenger.id) {
@@ -46,28 +49,35 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
 
   // פונקציה למציאת פרטי הטיסה לפי מספר טיסה
   const findFlightByNumber = (flightNumber) => {
-    debugger
     return Orders_Flights.flightslist.find(flight => flight.numOfFlight === flightNumber);
+  };
+
+  const handleDeleteOrder = (orderCode) => {
+ debugger
+      dispatch(deleteOrderThank(orderCode))
+        .then(() => {
+          // רענון רשימת ההזמנות לאחר המחיקה
+          dispatch(getOrderByIdThank(passenger.id));
+        })
+        .catch((error) => {
+          console.error("שגיאה במחיקת ההזמנה:", error);
+          alert("אירעה שגיאה במחיקת ההזמנה. אנא נסי שוב מאוחר יותר.");
+        });
   };
 
   // פונקציות לטיפול בעריכת הזמנה
   const handleEditClick = (order, orderDetail) => {
-    setEditingOrder({
-      orderCode: order.code,
-      detailCode: orderDetail.orderCode
-    });
+    setCurrentOrderToEdit(
+      order,
+      //orderDetail
+    );
 
     setEditFormData({
-
-
-      numOfTickets: orderDetail.numOfTickets || 
-                   (orderDetail.NumOfTicketsForFirstClass + orderDetail.NumOfTicketsForRegilerClass),
-      numClass: orderDetail.numClass || 
-               (orderDetail.NumOfTicketsForFirstClass > 0 ? 1 : 2)
+      numOfFlight: order.numOfFlight,
+      numOfTicketsForFirstClass: orderDetail.numOfTicketsForFirstClass || 0,
+      numOfTicketsForRegilerClass: orderDetail.numOfTicketsForRegilerClass || 0
     });
-    
-    // שורות חדשות - שמירת ההזמנה הנוכחית ופתיחת המודל
-    setCurrentOrderToEdit({ order, orderDetail });
+
     setShowEditModal(true);
   };
 
@@ -81,12 +91,30 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
 
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
-    // כאן תצטרך ליצור פעולה לעדכון ההזמנה ב-Redux
-    setEditingOrder(null);
-  };
 
-  const handleCancelClick = () => {
-    setEditingOrder(null);
+    // יצירת אובייקט ההזמנה המעודכן
+    const updatedOrder = {
+      // ...currentOrderToEdit.order,
+      // numOfFlight: editFormData.numOfFlight,
+      // orderdetails: {
+      //   ...currentOrderToEdit.order.orderdetails,
+      //   numOfTicketsForFirstClass: editFormData.numOfTicketsForFirstClass,
+      //   numOfTicketsForRegilerClass: editFormData.numOfTicketsForRegilerClass
+      // }
+...currentOrderToEdit,
+orderdetails: {...currentOrderToEdit.orderdetails,
+  numOfTicketsForFirstClass: editFormData.numOfTicketsForFirstClass,
+    numOfTicketsForRegilerClass: editFormData.numOfTicketsForRegilerClass
+    }
+
+  }
+
+    // שליחת העדכון לשרת
+    
+    dispatch(updateOrderThank(updatedOrder));
+
+    // סגירת המודל
+    setShowEditModal(false);
   };
 
   // מחלקות עבור הטבלה
@@ -108,7 +136,7 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
                 <th>מספר טיסה</th>
                 <th>תאריך הזמנה</th>
                 <th>מספר כרטיסים למחלקה ראשונה</th>
-                <th>מספר כרטיסים למחלקה שניה</th>
+                <th>מספר כרטיסים למחלקה רגילה</th>
                 <th>יעד</th>
                 <th>מוצא</th>
                 <th>חברה</th>
@@ -116,7 +144,6 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
                 <th>זמן המראה</th>
                 <th>זמן נחיתה</th>
                 <th>מחיר כרטיס</th>
-                <th>סטטוס</th>
                 <th>פעולות</th>
               </tr>
             </thead>
@@ -124,219 +151,72 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
               {Orders_Flights.orderslist.map((order) => {
                 // בדיקה שהאובייקט order הוא תקין
                 if (!order || typeof order !== 'object') return null;
-                
+
                 // מצא את הטיסה המתאימה להזמנה זו
-                debugger
                 const flight = findFlightByNumber(order.numOfFlight);
-                
+
                 // בדיקה שיש פרטי הזמנה
                 if (!order.orderdetails) return null;
-                
-                // אם orderdetails הוא מערך, השתמש ב-map
-                if (Array.isArray(order.orderdetails)) {
-                  // return order.orderdetails.map((detail, detailIndex) => {
-                  //   // בדוק אם הטיסה כבר עברה
-                  //   const isPassed = flight && isFlightPassed(flight.date, flight.departureTime);
 
-                  //   return (
-                  //     <tr
-                  //       key={`${order.code}-${detailIndex}`}
-                  //       className={isPassed ? "passed-flight" : ""}
-                  //     >
-                  //       <td>{order.code}</td>
-                  //       <td>{order.numOfFlight}</td>
-                  //       <td>{order.date}</td>
-                  //       <td>{order.order.orderdetails.numOfTicketsForFirstClass}kkkkkkk</td>
-                  //       {/* {editingOrder &&
-                  //         editingOrder.orderCode === order.code &&
-                  //         editingOrder.detailCode === detail.orderCode ? (
-                  //         <>
-                  //           <td>
-                  //             <input
-                  //               type="number"
-                  //               name="numOfTickets"
-                  //               value={editFormData.numOfTickets}
-                  //               onChange={handleEditFormChange}
-                  //               min="1"
-                  //             />
-                  //           </td>
-                  //           <td>
-                  //             <select
-                  //               name="numClass"
-                  //               value={editFormData.numClass}
-                  //               onChange={handleEditFormChange}
-                  //             >
-                  //               <option value="1">מחלקה ראשונה</option>
-                  //               <option value="2">מחלקה רגילה</option>
-                  //             </select>
-                  //           </td>
-                  //         </>
-                  //       ) : (
-                  //         <>
-                  //           <td>{detail.numOfTickets}</td>
-                  //           <td>{getClassType(detail.numClass)}</td>
-                  //         </>
-                  //       )} */}
+                // אם orderdetails הוא אובייקט בודד, טפל בו ישירות
+                const detail = order.orderdetails;
+                const isPassed = flight && isFlightPassed(flight.date, flight.departureTime);
 
-                  //       {/* פרטי הטיסה */}
-                  //       {flight ? (
-                  //         <>
-                  //           <td>{flight.destination}</td>
-                  //           <td>{flight.origin}</td>
-                  //           <td>{flight.company}</td>
-                  //           <td>{flight.date}</td>
-                  //           <td>{flight.departureTime}</td>
-                  //           <td>{flight.landingTime}</td>
-                  //           <td>
-                  //             {detail.numClass === 1
-                  //               ? `${flight.firstClassPrice} ₪`
-                  //               : `${flight.regularClassPrice} ₪`}
-                  //           </td>
-                  //           <td className={isPassed ? "status-passed" : "status-upcoming"}>
-                  //             {isPassed ? "טיסה עברה" : "טיסה עתידית"}
-                  //           </td>
-                  //         </>
-                  //       ) : (
-                  //         <>
-                  //           <td colSpan="7">פרטי טיסה לא נמצאו</td>
-                  //           <td>-</td>
-                  //         </>
-                  //       )}
+                return (
+                  <tr
+                    key={order.code}
+                    className={isPassed ? "passed-flight" : ""}
+                  >
+                    <td>{order.code}</td>
+                    <td>{order.numOfFlight}</td>
+                    <td>{order.date}</td>
+                    <td>{order.orderdetails?.numOfTicketsForFirstClass || 0}</td>
+                    <td>{order.orderdetails?.numOfTicketsForRegilerClass || 0}</td>
 
-                  //       {/* כפתורי פעולות */}
-                  //       <td>
-                  //         {editingOrder &&
-                  //           editingOrder.orderCode === order.code &&
-                  //           editingOrder.detailCode === detail.orderCode ? (
-                  //           <div className="edit-actions">
-                  //             <button
-                  //               className="save-btn"
-                  //               onClick={handleEditFormSubmit}
-                  //             >
-                  //               שמור
-                  //             </button>
-                  //             <button
-                  //               className="cancel-btn"
-                  //               onClick={handleCancelClick}
-                  //             >
-                  //               בטל
-                  //             </button>
-                  //           </div>
-                  //         ) : (
-                  //           <button
-                  //             className="edit-btn"
-                  //             onClick={() => handleEditClick(order, detail)}
-                  //             disabled={isPassed}
-                  //           >
-                  //             עריכה
-                  //           </button>
-                  //         )}
-                  //       </td>
-                  //     </tr>
-                  //   );
-                  // });
-                } else {
-                  // אם orderdetails הוא אובייקט בודד, טפל בו ישירות
-                  const detail = order.orderdetails;
-                  const isPassed = flight && isFlightPassed(flight.date, flight.departureTime);
+                    {/* פרטי הטיסה */}
+                    {flight ? (
+                      <>
+                        <td>{flight.destination}</td>
+                        <td>{flight.origin || flight.provenance}</td>
+                        <td>{flight.company || flight.companyName}</td>
+                        <td>{flight.date}</td>
+                        <td>{flight.departureTime || flight.timeOfDepart}</td>
+                        <td>{flight.landingTime || flight.timeOfLending}</td>
+                        <td>
+                          {detail.NumOfTicketsForFirstClass > 0
+                            ? `${flight.firstClassPrice || flight.priceOfFirstClass} ₪`
+                            : `${flight.regularClassPrice || flight.priceOfRegilerClass} ₪`}
+                        </td>
 
-                  return (
-                    <tr
-                      key={order.code}
-                      className={isPassed ? "passed-flight" : ""}
-                    >
-                      <td>{order.code}</td>
-                      <td>{order.numOfFlight}</td>
-                      <td>{order.date}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td colSpan="7">פרטי טיסה לא נמצאו</td>
+                        <td>-</td>
+                      </>
+                    )}
 
-                      {editingOrder &&
-                        editingOrder.orderCode === order.code &&
-                        editingOrder.detailCode === detail.orderCode ? (
-                        <>
-                          <td>
-                            <input
-                              type="number"
-                              name="numOfTicketsForFirstClass"
-                              value={editFormData.numOfTickets}
-                              onChange={handleEditFormChange}
-                              min="1"
-                            />
-                          </td>
-                          <td>
-                            <select
-                              name="numClass"
-                              value={editFormData.numClass}
-                              onChange={handleEditFormChange}
-                            >
-                              <option value="1">מחלקה ראשונה</option>
-                              <option value="2">מחלקה רגילה</option>
-                            </select>
-                          </td>
-                        </>
-                      ) : (
-                        <>
-                          <td>{detail.NumOfTicketsForFirstClass + detail.NumOfTicketsForRegilerClass}</td>
-                          <td>{detail.NumOfTicketsForFirstClass > 0 ? "מחלקה ראשונה" : "מחלקה רגילה"}</td>
-                        </>
-                      )}
-
-                      {/* פרטי הטיסה */}
-                      {flight ? (
-                        <>
-                          <td>{flight.destination}</td>
-                          <td>{flight.origin || flight.provenance}</td>
-                          <td>{flight.company || flight.companyName}</td>
-                          <td>{flight.date}</td>
-                          <td>{flight.departureTime || flight.timeOfDepart}</td>
-                          <td>{flight.landingTime || flight.timeOfLending}</td>
-                          <td>
-                            {detail.NumOfTicketsForFirstClass > 0
-                              ? `${flight.firstClassPrice || flight.priceOfFirstClass} ₪`
-                              : `${flight.regularClassPrice || flight.priceOfRegilerClass} ₪`}
-                          </td>
-                          <td className={isPassed ? "status-passed" : "status-upcoming"}>
-                            {isPassed ? "טיסה עברה" : "טיסה עתידית"}
-                          </td>
-                        </>
-                      ) : (
-                        <>
-                          <td colSpan="7">פרטי טיסה לא נמצאו</td>
-                          <td>-</td>
-                        </>
-                      )}
-
-                      {/* כפתורי פעולות */}
-                      <td>
-                        {editingOrder &&
-                          editingOrder.orderCode === order.code &&
-                          editingOrder.detailCode === detail.orderCode ? (
-                          <div className="edit-actions">
-                            <button
-                              className="save-btn"
-                              onClick={handleEditFormSubmit}
-                            >
-                              שמור
-                            </button>
-                            <button
-                              className="cancel-btn"
-                              onClick={handleCancelClick}
-                            >
-                              בטל
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            className="edit-btn"
-                            onClick={() => handleEditClick(order, detail)}
-                            disabled={isPassed}
-                          >
-                            עריכה
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
+                    {/* כפתורי פעולות */}
+                    <td>
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEditClick(order, detail)}
+                        disabled={isPassed}
+                      >
+                        עריכה
+                      </button>
+                    </td>
+                    <td className="order-actions">
+                      <button
+                        className="delete-booking-button"
+                        onClick={()=>handleDeleteOrder(order.code)}
+                      >
+                        <span className="material-icons">delete</span>
+                        <span>מחק הזמנה</span>
+                      </button>
+                    </td>
+                  </tr>
+                );
               })}
             </tbody>
           </table>
@@ -346,57 +226,60 @@ const [currentOrderToEdit, setCurrentOrderToEdit] = useState(null);
           </div>
         )}
       </div>
+
+      {/* חלונית עריכת הזמנה */}
       {showEditModal && currentOrderToEdit && (
-  <div className="modal-overlay">
-    <div className="edit-modal">
-      <div className="modal-header">
-        <h3>עריכת הזמנה</h3>
-        <button className="close-button" onClick={() => setShowEditModal(false)}>×</button>
-      </div>
-      <div className="modal-content">
-        <form onSubmit={handleEditFormSubmit}>
-          <div className="form-group">
-            <label>מספר הזמנה:</label>
-            <input type="text" value={currentOrderToEdit.order.code} disabled />
+        <div className="modal-overlay">
+          <div className="edit-modal">
+            <div className="modal-header">
+              <h3>עריכת הזמנה מספר: {currentOrderToEdit.code}</h3>
+              <button className="close-button" onClick={() => setShowEditModal(false)}>×</button>
+            </div>
+            <div className="modal-content">
+              <form onSubmit={handleEditFormSubmit}>
+                <div className="form-group">
+                  <label>מספר טיסה:</label>
+                  <input
+                    type="number"
+                    name="numOfFlight"
+                    value={editFormData.numOfFlight}
+                    onChange={handleEditFormChange}
+                    min="1"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>מספר כרטיסים למחלקה ראשונה:</label>
+                  <input
+                    type="number"
+                    name="numOfTicketsForFirstClass"
+                    value={editFormData.numOfTicketsForFirstClass}
+                    onChange={handleEditFormChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>מספר כרטיסים למחלקה רגילה:</label>
+                  <input
+                    type="number"
+                    name="numOfTicketsForRegilerClass"
+                    value={editFormData.numOfTicketsForRegilerClass}
+                    onChange={handleEditFormChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-actions">
+                  <button type="button" className="cancel-btn" onClick={() => setShowEditModal(false)}>
+                    ביטול
+                  </button>
+                  <button type="submit" className="save-btn">
+                    שמור שינויים
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-          <div className="form-group">
-            <label>מספר טיסה:</label>
-            <input type="text" value={currentOrderToEdit.order.numOfFlight} disabled />
-          </div>
-          <div className="form-group">
-            <label>מספר כרטיסים:</label>
-            <input
-              type="number"
-              name="numOfTickets"
-              value={editFormData.numOfTickets}
-              onChange={handleEditFormChange}
-              min="1"
-            />
-          </div>
-          <div className="form-group">
-            <label>מחלקה:</label>
-            <select
-              name="numClass"
-              value={editFormData.numClass}
-              onChange={handleEditFormChange}
-            >
-              <option value="1">מחלקה ראשונה</option>
-              <option value="2">מחלקה רגילה</option>
-            </select>
-          </div>
-          <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={() => setShowEditModal(false)}>
-              ביטול
-            </button>
-            <button type="submit" className="save-btn">
-              שמור שינויים
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-)}
+        </div>
+      )}
     </div>
   );
 };

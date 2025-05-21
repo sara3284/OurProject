@@ -1,0 +1,463 @@
+:root {
+    --primary-color: rgba(140, 198, 63, 1);
+    --primary-light: rgba(140, 198, 63, 0.08);
+    --primary-dark: rgba(93, 140, 20, 1);
+    --accent-color: rgba(41, 171, 226, 1);
+    --accent-light: rgba(41, 171, 226, 0.08);
+    --text-color: rgba(0, 0, 0, 1);
+    --text-light: rgba(128, 128, 128, 1);
+    --bg-color: rgba(255, 255, 255, 0.95);
+    --white: rgba(255, 255, 255, 1);
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.03);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --border-radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  
+  .airlines-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    direction: rtl;
+  }
+  
+  /* כותרת ובאנר */
+  .airlines-header {
+    margin-bottom: 3rem;
+  }
+  
+  .airlines-banner {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+  }
+  
+  .airlines-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background: url('../images/world-map.png') center center no-repeat; */
+    background-size: cover;
+    opacity: 0.1;
+    z-index: 1;
+  }
+  
+  .airlines-banner h1 {
+    font-size: 2.5rem;
+    margin: 0 0 1rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .airlines-banner p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .airlines-search {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .airlines-search input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1rem;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+  
+  .airlines-search input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary-light), var(--shadow);
+  }
+  
+  .airlines-search .material-icons {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    font-size: 1.5rem;
+  }
+  
+  /* רשת חברות תעופה */
+  .airlines-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .airline-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .airline-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .airline-card.selected {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 0 5px var(--primary-light), var(--shadow-lg);
+  }
+  
+  .airline-logo-container {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: linear-gradient(to bottom, #f8f9fa, white);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .airline-logo {
+    max-width: 80%;
+    max-height: 100px;
+    object-fit: contain;
+    transition: var(--transition);
+  }
+  
+  .airline-card:hover .airline-logo {
+    transform: scale(1.05);
+  }
+  
+  .airline-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .airline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .airline-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .airline-code {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .airline-description {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+  
+  .airline-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+  
+  .airline-details.show {
+    max-height: 500px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .detail-item .material-icons {
+    color: var(--primary-color);
+    margin-left: 1rem;
+    font-size: 1.2rem;
+  }
+  
+  .detail-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .detail-label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+  }
+  
+  .detail-value {
+    font-weight: 500;
+  }
+  
+  .airline-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .airline-website-link,
+  .airline-flights-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: var(--transition);
+  }
+  
+  .airline-website-link {
+    background-color: var(--accent-light);
+    color: var(--accent-color);
+  }
+  
+  .airline-website-link:hover {
+    background-color: var(--accent-color);
+    color: white;
+  }
+  
+  .airline-flights-link {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+  }
+  
+  .airline-flights-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .details-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-top: auto;
+    transition: var(--transition);
+  }
+  
+  .details-toggle:hover {
+    color: var(--primary-dark);
+  }
+  
+  /* אין תוצאות */
+  .no-results {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-light);
+  }
+  
+  .no-results .material-icons {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  .no-results p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .no-results button {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .no-results button:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* פוטר */
+  .airlines-footer {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-top: 3rem;
+  }
+  
+  .airlines-footer h3 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: var(--text-color);
+  }
+  
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .benefit-card {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: var(--bg-color);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+  }
+  
+  .benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+  }
+  
+  .benefit-card .material-icons {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+  
+  .benefit-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+  }
+  
+  .benefit-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+  
+  /* אנימציות */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .airline-card {
+    animation: fadeIn 0.6s ease forwards;
+    animation-delay: calc(0.1s * var(--index, 0));
+    opacity: 0;
+  }
+  
+  .airlines-grid > *:nth-child(1) { --index: 1; }
+  .airlines-grid > *:nth-child(2) { --index: 2; }
+  .airlines-grid > *:nth-child(3) { --index: 3; }
+  .airlines-grid > *:nth-child(4) { --index: 4; }
+  .airlines-grid > *:nth-child(5) { --index: 5; }
+  .airlines-grid > *:nth-child(6) { --index: 6; }
+  .airlines-grid > *:nth-child(7) { --index: 7; }
+  .airlines-grid > *:nth-child(8) { --index: 8; }
+  
+  /* התאמות למסכים קטנים */
+  @media (max-width: 992px) {
+    .airlines-banner h1 {
+      font-size: 2rem;
+    }
+    
+    .airlines-banner p {
+      font-size: 1rem;
+    }
+    
+    .airlines-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .airlines-container {
+      padding: 1.5rem;
+    }
+    
+    .airlines-banner {
+      padding: 2rem 1.5rem;
+    }
+    
+    .airlines-banner h1 {
+      font-size: 1.8rem;
+    }
+    
+    .airlines-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .airline-actions {
+      flex-direction: column;
+    }
+    
+    .airline-website-link,
+    .airline-flights-link {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .airlines-banner h1 {
+      font-size: 1.5rem;
+    }
+    
+    .airlines-banner p {
+      font-size: 0.9rem;
+    }
+    
+    .airline-logo-container {
+      height: 120px;
+    }
+    
+    .airline-header h2 {
+      font-size: 1.3rem;
+    }
+  }
+  
+  /* שיפור נגישות */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  

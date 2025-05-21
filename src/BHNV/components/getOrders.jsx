@@ -5,15 +5,17 @@ import { useEffect, useState } from "react";
 import { getOrdersThank } from "../slices/getOrdersThank";
 import { getFlightsThank } from "../slices/getFlightsThank";
 import { Manager } from "./manager";
-import { GetOrderById } from "./getOrdersById";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../css/getOrders.css";
 import { UpdateFlight, updateFlightThank } from "../slices/updateFlightThank";
+import { getOrderByIdThank } from "../slices/getOrderByIdThank";
+import { getDetailsByIdThank } from "../slices/getDetailsByIdThank";
 
 export const GetOrders = () => {
     const bool = useSelector(state => state.event.bool);
     const orders = useSelector(state => state.event.orders);
+    const passenger = useSelector(state => state.event.passenger);
     const flights = useSelector(state => state.event.flights);
     const dispatch = useDispatch();
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -21,6 +23,7 @@ export const GetOrders = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedFlight, setEditedFlight] = useState(null);
     const [showPassengerDetails, setShowPassengerDetails] = useState(false);
+    const [isLoadingPassenger, setIsLoadingPassenger] = useState(false);
     const [companies, setCompanies] = useState([
         { companyCode: 1, companyName: "אל על" },
         { companyCode: 2, companyName: "ישראייר" },
@@ -29,7 +32,7 @@ export const GetOrders = () => {
         { companyCode: 5, companyName: "לופטהנזה" },
         { companyCode: 6, companyName: "בריטיש איירווייס" },
         { companyCode: 7, companyName: "איירפראנס" },
-        { companyCode: 8, companyName: "דלתא" }
+        { companyCode: 8, companyName: "Delta" }
     ]);
     const [countryFilter, setCountryFilter] = useState("");
     const [countries, setCountries] = useState([
@@ -53,9 +56,21 @@ export const GetOrders = () => {
         setIsEditing(false);
     };
 
-    const handlePassengerDetails = (passengerId) => {
+    const handlePassengerDetails = async(passengerId) => {
+        setIsLoadingPassenger(true);
         setShowPassengerDetails(true);
-        dispatch(GetOrderById(passengerId));
+      
+    dispatch(getDetailsByIdThank(passengerId))
+    //    if(aa.payload){
+
+    //     setSelectedp(aa.payload);
+    //    }
+    //    .then(() => {
+    //         setIsLoadingPassenger(false);
+    //     }).catch(error => {
+    //         console.error("שגיאה בטעינת פרטי הנוסע:", error);
+    //         setIsLoadingPassenger(false);
+    //     });
     };
 
     const handleEditClick = () => {
@@ -63,9 +78,15 @@ export const GetOrders = () => {
     };
 
     const handleSaveClick = () => {
+        // בדיקה שתחנת ביניים הוזנה אם הטיסה אינה ישירה
+        if (!editedFlight.isDirect && !editedFlight.stop) {
+            alert("חובה להזין תחנת ביניים עבור טיסה שאינה ישירה");
+            return;
+        }
+        
         // כאן יש להוסיף קריאה לשרת לעדכון פרטי הטיסה
         dispatch(updateFlightThank(editedFlight));
-        alert("פרטי הטיסה עודכנו בהצלחה! ============"+  {bool} );
+        alert("פרטי הטיסה עודכנו בהצלחה!");
         setIsEditing(false);
         setSelectedFlight(editedFlight);
     };
@@ -73,43 +94,6 @@ export const GetOrders = () => {
     const handleCancelEdit = () => {
         setEditedFlight({...selectedFlight});
         setIsEditing(false);
-    };
-
-    const handleCompanyCodeChange = (e) => {
-        const code = parseInt(e.target.value);
-        const company = companies.find(c => c.companyCode === code);
-        
-        if (company) {
-            setEditedFlight({
-                ...editedFlight,
-                companyCode: code,
-                companyName: company.companyName
-            });
-        } else {
-            setEditedFlight({
-                ...editedFlight,
-                companyCode: code,
-                companyName: ""
-            });
-        }
-    };
-
-    const handleCompanyNameChange = (e) => {
-        const name = e.target.value;
-        const company = companies.find(c => c.companyName === name);
-        
-        if (company) {
-            setEditedFlight({
-                ...editedFlight,
-                companyName: name,
-                companyCode: company.companyCode
-            });
-        } else {
-            setEditedFlight({
-                ...editedFlight,
-                companyName: name
-            });
-        }
     };
 
     const handleDateChange = (date) => {
@@ -130,11 +114,18 @@ export const GetOrders = () => {
     const handleDirectChange = (e) => {
         const isDirect = e.target.value === "true";
         
-        setEditedFlight({
-            ...editedFlight,
-            isDirect: isDirect,
-            stop: isDirect ? "" : editedFlight.stop
-        });
+        if (isDirect) {
+            setEditedFlight({
+                ...editedFlight,
+                isDirect: true,
+                stop: ""
+            });
+        } else {
+            setEditedFlight({
+                ...editedFlight,
+                isDirect: false
+            });
+        }
     };
 
     const filteredCountries = countries.filter(country => 
@@ -273,37 +264,21 @@ export const GetOrders = () => {
                             <div className="form-row">
                                 <div className="form-group">
                                     <label>קוד חברה:</label>
-                                    <select 
+                                    <input 
+                                        type="text" 
                                         value={editedFlight.companyCode} 
-                                        onChange={handleCompanyCodeChange}
-                                    >
-                                        <option value="">בחר חברה</option>
-                                        {companies.map(company => (
-                                            <option 
-                                                key={company.companyCode} 
-                                                value={company.companyCode}
-                                            >
-                                                {company.companyCode} - {company.companyName}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        readOnly
+                                        className="readonly-field"
+                                    />
                                 </div>
                                 <div className="form-group">
                                     <label>שם חברה:</label>
-                                    <select 
+                                    <input 
+                                        type="text" 
                                         value={editedFlight.companyName} 
-                                        onChange={handleCompanyNameChange}
-                                    >
-                                        <option value="">בחר חברה</option>
-                                        {companies.map(company => (
-                                            <option 
-                                                key={company.companyCode} 
-                                                value={company.companyName}
-                                            >
-                                                {company.companyName}
-                                            </option>
-                                        ))}
-                                    </select>
+                                        readOnly
+                                        className="readonly-field"
+                                    />
                                 </div>
                             </div>
                             
@@ -342,125 +317,173 @@ export const GetOrders = () => {
                                     <input 
                                         type="text" 
                                         value={editedFlight.provenance} 
-                                        onChange={(e) => setEditedFlight({...editedFlight, provenance: e.target.value})}
-                                        />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>יעד:</label>
-                                            <input 
-                                                type="text" 
-                                                value={editedFlight.destination} 
-                                                onChange={(e) => setEditedFlight({...editedFlight, destination: e.target.value})}
-                                            />
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>מחיר מחלקה ראשונה:</label>
-                                            <input 
-                                                type="number" 
-                                                value={editedFlight.priceOfFirstClass} 
-                                                onChange={(e) => setEditedFlight({...editedFlight, priceOfFirstClass: Number(e.target.value)})}
-                                                min="0"
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>מחיר מחלקה רגילה:</label>
-                                            <input 
-                                                type="number" 
-                                                value={editedFlight.priceOfRegilerClass} 
-                                                onChange={(e) => setEditedFlight({...editedFlight, priceOfRegilerClass: Number(e.target.value)})}
-                                                min="0"
-                                            />
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>טיסה ישירה:</label>
-                                            <select 
-                                                value={editedFlight.isDirect.toString()} 
-                                                onChange={handleDirectChange}
-                                            >
-                                                <option value="true">כן</option>
-                                                <option value="false">לא</option>
-                                            </select>
-                                        </div>
-                                        {!editedFlight.isDirect && (
-                                            <div className="form-group">
-                                                <label>תחנת ביניים:</label>
-                                                <div className="search-select">
-                                                    <input 
-                                                        type="text"
-                                                        placeholder="חפש מדינה..."
-                                                        value={countryFilter}
-                                                        onChange={(e) => setCountryFilter(e.target.value)}
-                                                    />
-                                                    <div className="country-dropdown">
-                                                        {filteredCountries.map(country => (
-                                                            <div 
-                                                                key={country}
-                                                                className="country-option"
-                                                                onClick={() => {
-                                                                    setEditedFlight({...editedFlight, stop: country});
-                                                                    setCountryFilter("");
-                                                                }}
-                                                            >
-                                                                {country}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                                <div className="selected-stop">
-                                                    {editedFlight.stop && (
-                                                        <div className="stop-tag">
-                                                            {editedFlight.stop}
-                                                            <span 
-                                                                className="remove-stop"
-                                                                onClick={() => setEditedFlight({...editedFlight, stop: ""})}
-                                                            >
-                                                                ×
-                                                            </span>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                    
-                                    <div className="form-actions">
-                                        <button className="cancel-button" onClick={handleCancelEdit}>
-                                            ביטול
-                                        </button>
-                                        <button className="save-button" onClick={handleSaveClick}>
-                                            שמור שינויים
-                                        </button>
-                                    </div>
+                                        readOnly
+                                        className="readonly-field"
+                                    />
                                 </div>
-                            )}
-                        </div>
-                    )}
-                    
-                    {showPassengerDetails && (
-                        <div className="modal-overlay">
-                            <div className="passenger-modal">
-                                <div className="modal-header">
-                                    <h3>פרטי נוסע</h3>
-                                    <button 
-                                        className="close-button"
-                                        onClick={() => setShowPassengerDetails(false)}
+                                <div className="form-group">
+                                    <label>יעד:</label>
+                                    <input 
+                                        type="text" 
+                                        value={editedFlight.destination} 
+                                        readOnly
+                                        className="readonly-field"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>מחיר מחלקה ראשונה:</label>
+                                    <input 
+                                        type="number" 
+                                        value={editedFlight.priceOfFirstClass} 
+                                        onChange={(e) => setEditedFlight({...editedFlight, priceOfFirstClass: Number(e.target.value)})}
+                                        min="0"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>מחיר מחלקה רגילה:</label>
+                                    <input 
+                                        type="number" 
+                                        value={editedFlight.priceOfRegilerClass} 
+                                        onChange={(e) => setEditedFlight({...editedFlight, priceOfRegilerClass: Number(e.target.value)})}
+                                        min="0"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>טיסה ישירה:</label>
+                                    <select 
+                                        value={editedFlight.isDirect.toString()} 
+                                        onChange={handleDirectChange}
                                     >
-                                        ×
-                                    </button>
+                                        <option value="true">כן</option>
+                                        <option value="false">לא</option>
+                                    </select>
                                 </div>
-                                <div className="modal-content">
-                                    <GetOrderById />
-                                </div>
+                                {!editedFlight.isDirect && (
+                                    <div className="form-group">
+                                        <label>תחנת ביניים:</label>
+                                        <div className="search-select">
+                                            <input 
+                                                type="text"
+                                                placeholder="חפש מדינה..."
+                                                value={countryFilter}
+                                                onChange={(e) => setCountryFilter(e.target.value)}
+                                            />
+                                            <div className="country-dropdown">
+                                                {filteredCountries.map(country => (
+                                                    <div 
+                                                        key={country}
+                                                        className="country-option"
+                                                        onClick={() => {
+                                                            setEditedFlight({...editedFlight, stop: country});
+                                                            setCountryFilter("");
+                                                        }}
+                                                    >
+                                                        {country}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="selected-stop">
+                                            {editedFlight.stop && (
+                                                <div className="stop-tag">
+                                                    {editedFlight.stop}
+                                                    <span 
+                                                        className="remove-stop"
+                                                        onClick={() => setEditedFlight({...editedFlight, stop: ""})}
+                                                    >
+                                                        ×
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            
+                            <div className="form-actions">
+                                <button className="cancel-button" onClick={handleCancelEdit}>
+                                    ביטול
+                                </button>
+                                <button className="save-button" onClick={handleSaveClick}>
+                                    שמור שינויים
+                                </button>
                             </div>
                         </div>
                     )}
                 </div>
-            );
-        };
-        
+            )}
+            
+            {/* חלונית פרטי נוסע - שינוי מהקוד המקורי */}
+            {showPassengerDetails && (
+                <div className="modal-overlay">
+                    <div className="passenger-modal">
+                        <div className="modal-header">
+                            <h3>פרטי נוסע</h3>
+                            <button 
+                                className="close-button"
+                                onClick={() => setShowPassengerDetails(false)}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className="modal-content">
+                            {isLoadingPassenger ? (
+                                <div className="loading-container">
+                                    <div className="loading-spinner"></div>
+                                    <p>טוען פרטי נוסע...</p>
+                                </div>
+                            ) : passenger ? (
+                                <div className="passenger-details">
+                                    <div className="detail-row">
+                                        <div className="detail-group">
+                                            <span className="detail-label">תעודת זהות:</span>
+                                            <span className="detail-value">{passenger.id}</span>
+                                        </div>
+                                    </div>
+                                    <div className="detail-row">
+                                        <div className="detail-group">
+                                            <span className="detail-label">שם:</span>
+                                            <span className="detail-value">{passenger.name}</span>
+                                        </div>
+                                    </div>
+                                    <div className="detail-row">
+                                        <div className="detail-group">
+                                            <span className="detail-label">אימייל:</span>
+                                            <span className="detail-value">{passenger.email}</span>
+                                        </div>
+                                        <div className="detail-group">
+                                            <span className="detail-label">טלפון:</span>
+                                            <span className="detail-value">{passenger.phone}</span>
+                                        </div>
+                                    </div>
+                                    <div className="detail-row">
+                                        <div className="detail-group">
+                                            <span className="detail-label">עיר:</span>
+                                            <span className="detail-value">{passenger.city}</span>
+                                        </div>
+                                    </div>
+                                    <div className="detail-row">
+                                        <div className="detail-group">
+                                            <span className="detail-label">תאריך לידה:</span>
+                                            <span className="detail-value">{formatDate(passenger.birthDate)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="no-data">
+                                    <p>לא נמצאו פרטי נוסע</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};

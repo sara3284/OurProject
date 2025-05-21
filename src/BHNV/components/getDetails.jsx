@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import '../css/getPassengers.css';
-import { UpdatePassenger } from "../slices/updatePassenger";
+import { updatePassenger } from "../slices/updatePassenger";
 import { useSelector, useDispatch } from "react-redux";
 export const GetDetails = () => {
     const location = useLocation();
@@ -45,7 +45,7 @@ export const GetDetails = () => {
     };
 
     const handleEditInputChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, } = e.target;
         setEditFormData({
             ...editFormData,
             [name]: value
@@ -57,7 +57,8 @@ export const GetDetails = () => {
         navigate(-1); // חזרה לדף הקודם
     };
     const saveChanges = () => {
-        dispatch(UpdatePassenger(editFormData));
+        dispatch(updatePassenger(editFormData));
+
     }
     // אם אין פרטי משתמש, מציג הודעה מתאימה
     if (!passenger) {
@@ -152,7 +153,7 @@ export const GetDetails = () => {
                             <button type="button" className="cancel-button" onClick={handleClose}>
                                 ביטול
                             </button>
-                            <button type="submit" className="save-button" onClick={saveChanges()}>
+                            <button type="submit" className="save-button" onClick={()=>saveChanges()}>
                                 שמירת שינויים
                             </button>
                         </div>

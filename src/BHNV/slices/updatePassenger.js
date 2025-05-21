@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 
-export const UpdatePassenger = createAsyncThunk(
-    'UpdatePassenger',
+export const updatePassenger = createAsyncThunk(
+    'updatePassenger',
     async (passenger) => {
         const res = await fetch(`https://localhost:7103/api/Passengers/UpdatePassenger`,
             {
@@ -14,9 +14,9 @@ export const UpdatePassenger = createAsyncThunk(
             }
         )
         if (res.ok) {
-            const data = await res.json();
+            // const data = await res.json();
             console.log("ffffffffffffffffff");
-            return data;
+            return ;
         }
         else throw new Error("Failed to fetch");
     }
