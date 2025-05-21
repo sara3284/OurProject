@@ -9,9 +9,13 @@ import { getFlightsThank } from "./getFlightsThank";
 import { getOrdersThank } from "./getOrdersThank";
 import { GetPassengersThank } from "./getPassengersThank";
 import { getOrders_Flights } from "./getOrders_Flights";
-import { UpdatePassenger } from "./updatePassenger";
+import { updatePassenger } from "./updatePassenger";
 import { getCompanyThank } from "./getCompanyThank";
 import { UpdateFlight, updateFlightThank } from "./updateFlightThank";
+import { updateOrderThank } from "./updateOrderThank";
+import { deleteOrderThank } from "./deleteOrderThank";
+import { getDetailsByIdThank } from "./getDetailsByIdThank";
+import { addFlightThank } from "./addFlightThank";
 
 export const INITIALSTATE = {
     orders: [{
@@ -22,8 +26,8 @@ export const INITIALSTATE = {
         orderdetails: 
             {
                 orderCode: 0,
-                NumOfTicketsForFirstClass: 0,
-                NumOfTicketsForRegilerClass: 0
+                numOfTicketsForFirstClass: 0,
+                numOfTicketsForRegilerClass: 0
             }
         
     }],
@@ -36,8 +40,8 @@ export const INITIALSTATE = {
             orderdetails: 
                 {
                     orderCode: 0,
-                    NumOfTicketsForFirstClass: 0,
-                    NumOfTicketsForRegilerClass: 0
+                    numOfTicketsForFirstClass: 0,
+                    numOfTicketsForRegilerClass: 0
                 }
             
         }],
@@ -147,6 +151,11 @@ export const flightsSlice = createSlice({
             console.log("success");
             // state.orderCode = state.orderCode+5
         });
+        builder.addCase(addFlightThank.fulfilled, (state, action) => {
+            state.flights = action.payload;
+            console.log("success");
+            // state.orderCode = state.orderCode+5
+        });
         builder.addCase(getFlightsThank.fulfilled, (state, action) => {
 
             state.flights = action.payload;
@@ -159,13 +168,29 @@ export const flightsSlice = createSlice({
 
             state.orders = action.payload;
         });
-        builder.addCase(UpdatePassenger.fulfilled, (state, action) => {
+        builder.addCase(getDetailsByIdThank.fulfilled, (state, action) => {
+
             state.passenger = action.payload;
+        });
+        builder.addCase(updatePassenger.fulfilled, (state, action) => {
+            debugger
+            state.passenger = action.meta.arg;
 
         });
+        builder.addCase(updateOrderThank.rejected, (state, action) => {
+            console.error("Order update failed:", action.payload);
+            state.error = action.payload;
+          });
         builder.addCase(updateFlightThank.fulfilled, (state, action) => {
             state.bool = action.payload;
 
+        });
+        builder.addCase(updateOrderThank.fulfilled, (state, action) => {
+          //  state.orders = action.payload;
+        });
+        builder.addCase(deleteOrderThank.fulfilled, (state, action) => {
+
+            state.bool = action.payload;
         });
     }
 });

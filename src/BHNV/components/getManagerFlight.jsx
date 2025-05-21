@@ -10,6 +10,7 @@ import { getOrders_Flights } from "../slices/getOrders_Flights";
 import { GetOrders } from "./getOrders";
 import { getOrdersThank } from "../slices/getOrdersThank";
 import { GetPassengersThank } from "../slices/getPassengersThank";
+import { addFlightThank } from "../slices/addFlightThank";
 
 export const GetManagerFlights = () => {
     const passenger = useSelector(state => state.event.passenger);
@@ -26,6 +27,35 @@ export const GetManagerFlights = () => {
     const [flightOrders, setFlightOrders] = useState([]);
     const [showPassedFlights, setShowPassedFlights] = useState(false);
     const [selectedPassenger, setSelectedPassenger] = useState(null);
+    const [showAddFlightModal, setShowAddFlightModal] = useState(false);
+    const [newFlight, setNewFlight] = useState({
+        numOfFlight: "",
+        companyCode: "",
+        companyName: "",
+        date: "",
+        timeOfDepart: "",
+        timeOfLending: "",
+        destination: "",
+        provenance: "",
+        priceOfFirstClass: 0,
+        priceOfRegilerClass: 0,
+        numOfSeetsInFirstClass: 0,
+        numOfSeetsInRegilerClass: 0,
+        isDirect: true,
+        stop: "",
+        numOfEmptySeetsInFirstClass: 0,
+        numOfEmptySeetsInRegilerClass: 0
+    });
+    const [companies, setCompanies] = useState([
+        { companyCode: 1, companyName: "אל על" },
+        { companyCode: 2, companyName: "ישראייר" },
+        { companyCode: 8, companyName: "אמריקן איירליינס" },
+        { companyCode: 4, companyName: "טורקיש איירליינס" },
+        { companyCode: 5, companyName: "לופטהנזה" },
+        { companyCode: 6, companyName: "בריטיש איירווייס" },
+        { companyCode: 7, companyName: "איירפראנס" },
+        { companyCode: 3, companyName: "Delta" }
+    ]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -63,6 +93,7 @@ export const GetManagerFlights = () => {
         const passengerData = passenger.find(passenger => passenger.id === passengerId)
         setSelectedPassenger(passengerData);
     };
+    
     const isFlightDatePassed = (flightDate) => {
         try {
             const today = new Date();
@@ -107,14 +138,98 @@ export const GetManagerFlights = () => {
     const uniqueDestinations = [...new Set(flights?.map(flight => flight.destination) || [])];
     const uniqueProvenances = [...new Set(flights?.map(flight => flight.provenance) || [])];
 
+    // פונקציה לאיפוס טופס הטיסה الجديدة
+    const resetNewFlightForm = () => {
+        setNewFlight({
+            numOfFlight: "",
+            companyCode: "",
+            companyName: "",
+            date: "",
+            timeOfDepart: "",
+            timeOfLending: "",
+            destination: "",
+            provenance: "",
+            priceOfFirstClass: "",
+            priceOfRegilerClass: "",
+            numOfSeetsInFirstClass: "",
+            numOfSeetsInRegilerClass: "",
+            isDirect: true,
+            stop: "",
+            numOfEmptySeetsInFirstClass: "",
+            numOfEmptySeetsInRegilerClass: ""
+        });
+    };
+
+    // פונקציה להוספת טיסה חדשה
+    const handleAddFlight = () => {
+        // בדיקת תקינות הנתונים
+        if (!newFlight.numOfFlight || !newFlight.companyCode || !newFlight.companyName || 
+            !newFlight.date || !newFlight.timeOfDepart || !newFlight.timeOfLending || 
+            !newFlight.destination || !newFlight.provenance || !newFlight.priceOfFirstClass || 
+            !newFlight.priceOfRegilerClass || !newFlight.numOfSeetsInFirstClass || 
+            !newFlight.numOfSeetsInRegilerClass) {
+            alert("נא למלא את כל השדות החובה");
+            return;
+        }
+
+        // בדיקה שהתאריך עתידי
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const flightDate = new Date(newFlight.date);
+        if (flightDate < today) {
+            alert("לא ניתן להוסיף טיסה בתאריך שעבר");
+            return;
+        }
+
+        // בדיקה שהוזנה תחנת ביניים אם הטיסה אינה ישירה
+        if (!newFlight.isDirect && !newFlight.stop) {
+            alert("נא להזין תחנת ביניים עבור טיסה שאינה ישירה");
+            return;
+        }
+
+        // המרת ערכים למספרים
+        const flightToAdd = {
+            ...newFlight,
+            numOfFlight: parseInt(newFlight.numOfFlight),
+            companyCode: parseInt(newFlight.companyCode),
+            priceOfFirstClass: parseInt(newFlight.priceOfFirstClass),
+            priceOfRegilerClass: parseInt(newFlight.priceOfRegilerClass),
+            numOfSeetsInFirstClass: parseInt(newFlight.numOfSeetsInFirstClass),
+            numOfSeetsInRegilerClass: parseInt(newFlight.numOfSeetsInRegilerClass),
+            numOfEmptySeetsInFirstClass: parseInt(newFlight.numOfSeetsInFirstClass),
+            numOfEmptySeetsInRegilerClass: parseInt(newFlight.numOfSeetsInRegilerClass)
+        };
+
+        // לצורך הדגמה בלבד - יש להחליף בקוד אמיתי
+        dispatch(addFlightThank(flightToAdd));
+        setShowAddFlightModal(false);
+        resetNewFlightForm();
+    };
+
     return (
         <div className="flights-container">
             <div className="airplane-animation"></div>
-            {passenger.id === "328489976" && <Manager />}
+            {passenger.id === "328489976" && (
+                <>
+                
+                    <Manager />
+                    
+                </>
+            )}
             <div className="flights-header">
                 <h1>טיסות זמינות</h1>
                 <p>צפייה בטיסות והזמנות</p>
             </div>
+            <button 
+                        className="add-flight-button" 
+                        onClick={() => {
+                            resetNewFlightForm();
+                            setShowAddFlightModal(true);
+                        }}
+                    >
+                        <i className="material-icons">add_circle</i>
+                        <span>הוספת טיסה חדשה</span>
+                    </button>
             <div className="search-filters">
                 <div className="search-bar">
                     <input
@@ -415,8 +530,6 @@ export const GetManagerFlights = () => {
                 </div>
             )}
 
-
-
             {selectedPassenger && (
                 <div className="modal-overlay">
                     <div className="passenger-details-modal">
@@ -491,7 +604,211 @@ export const GetManagerFlights = () => {
                     </div>
                 </div>
             )}
+
+            {/* חלונית הוספת טיסה חדשה */}
+            {showAddFlightModal && (
+                <div className="modal-overlay">
+                    <div className="add-flight-modal">
+                        <div className="modal-header">
+                            <h3>הוספת טיסה חדשה</h3>
+                            <button 
+                                className="close-button" 
+                                onClick={() => {
+                                    setShowAddFlightModal(false);
+                                    resetNewFlightForm();
+                                }}
+                            >
+                                <i className="material-icons">close</i>
+                            </button>
+                        </div>
+                        <div className="modal-content">
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>מספר טיסה:</label>
+                                    <input 
+                                        type="text" 
+                                        value={newFlight.numOfFlight} 
+                                        onChange={(e) => setNewFlight({...newFlight, numOfFlight: e.target.value})}
+                                        placeholder="הזן מספר טיסה"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>חברת תעופה:</label>
+                                    <select 
+                                        value={newFlight.companyCode} 
+                                        onChange={(e) => {
+                                            const selectedCompany = companies.find(c => c.companyCode === parseInt(e.target.value));
+                                            setNewFlight({
+                                                ...newFlight, 
+                                                companyCode: e.target.value,
+                                                companyName: selectedCompany ? selectedCompany.companyName : ""
+                                            });
+                                        }}
+                                    >
+                                        <option value="">בחר חברת תעופה</option>
+                                        {companies.map(company => (
+                                            <option key={company.companyCode} value={company.companyCode}>
+                                                {company.companyName} ({company.companyCode})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>תאריך:</label>
+                                    <input 
+                                        type="string" 
+                                        value={newFlight.date instanceof Date ? newFlight.date.toISOString().split('T')[0] : ''}
+                                        onChange={(e) => setNewFlight({...newFlight, date: new Date(e.target.value)})}
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>שעת המראה:</label>
+                                    <input 
+                                        type="time" 
+                                        value={newFlight.timeOfDepart} 
+                                        onChange={(e) => setNewFlight({...newFlight, timeOfDepart: e.target.value})}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>שעת נחיתה:</label>
+                                    <input 
+                                        type="time" 
+                                        value={newFlight.timeOfLending} 
+                                        onChange={(e) => setNewFlight({...newFlight, timeOfLending: e.target.value})}
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>מוצא:</label>
+                                    <input 
+                                        type="text" 
+                                        value={newFlight.provenance} 
+                                        onChange={(e) => setNewFlight({...newFlight, provenance: e.target.value})}
+                                        placeholder="הזן מוצא"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>יעד:</label>
+                                    <input 
+                                        type="text" 
+                                        value={newFlight.destination} 
+                                        onChange={(e) => setNewFlight({...newFlight, destination: e.target.value})}
+                                        placeholder="הזן יעד"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>מחיר מחלקה ראשונה:</label>
+                                    <input 
+                                        type="number" 
+                                        value={newFlight.priceOfFirstClass} 
+                                        onChange={(e) => setNewFlight({...newFlight, priceOfFirstClass: e.target.value})}
+                                        placeholder="הזן מחיר"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>מחיר מחלקה רגילה:</label>
+                                    <input 
+                                        type="number" 
+                                        value={newFlight.priceOfRegilerClass} 
+                                        onChange={(e) => setNewFlight({...newFlight, priceOfRegilerClass: e.target.value})}
+                                        placeholder="הזן מחיר"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>מספר מושבים במחלקה ראשונה:</label>
+                                    <input 
+                                        type="number" 
+                                        value={newFlight.numOfSeetsInFirstClass} 
+                                        onChange={(e) => setNewFlight({
+                                            ...newFlight, 
+                                            numOfSeetsInFirstClass: e.target.value,
+                                            numOfEmptySeetsInFirstClass: e.target.value
+                                        })}
+                                        placeholder="הזן מספר מושבים"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>מספר מושבים במחלקה רגילה:</label>
+                                    <input 
+                                        type="number" 
+                                        value={newFlight.numOfSeetsInRegilerClass} 
+                                        onChange={(e) => setNewFlight({
+                                            ...newFlight, 
+                                            numOfSeetsInRegilerClass: e.target.value,
+                                            numOfEmptySeetsInRegilerClass: e.target.value
+                                        })}
+                                        placeholder="הזן מספר מושבים"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>טיסה ישירה:</label>
+                                    <select 
+                                        value={newFlight.isDirect.toString()} 
+                                        onChange={(e) => setNewFlight({
+                                            ...newFlight, 
+                                            isDirect: e.target.value === "true",
+                                            stop: e.target.value === "true" ? "" : newFlight.stop
+                                        })}
+                                    >
+                                        <option value="true">כן</option>
+                                        <option value="false">לא</option>
+                                    </select>
+                                </div>
+                                
+                                {!newFlight.isDirect && (
+                                    <div className="form-group">
+                                        <label>תחנת ביניים:</label>
+                                        <input 
+                                            type="text" 
+                                            value={newFlight.stop} 
+                                            onChange={(e) => setNewFlight({...newFlight, stop: e.target.value})}
+                                            placeholder="הזן תחנת ביניים"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        
+                        <div className="modal-footer">
+                            <button 
+                                className="cancel-button" 
+                                onClick={() => {
+                                    setShowAddFlightModal(false);
+                                    resetNewFlightForm();
+                                }}
+                            >
+                                ביטול
+                            </button>
+                            <button 
+                                className="save-button" 
+                                onClick={handleAddFlight}
+                            >
+                                הוסף טיסה
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
-
