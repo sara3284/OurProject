@@ -11,6 +11,7 @@ import { GetOrders } from "./getOrders";
 import { getOrdersThank } from "../slices/getOrdersThank";
 import { GetPassengersThank } from "../slices/getPassengersThank";
 import { addFlightThank } from "../slices/addFlightThank";
+import { getCompanyThank } from "../slices/getCompanyThank";
 
 export const GetManagerFlights = () => {
     const passenger = useSelector(state => state.event.passenger);
@@ -46,22 +47,14 @@ export const GetManagerFlights = () => {
         numOfEmptySeetsInFirstClass: 0,
         numOfEmptySeetsInRegilerClass: 0
     });
-    const [companies, setCompanies] = useState([
-        { companyCode: 1, companyName: "אל על" },
-        { companyCode: 2, companyName: "ישראייר" },
-        { companyCode: 8, companyName: "אמריקן איירליינס" },
-        { companyCode: 4, companyName: "טורקיש איירליינס" },
-        { companyCode: 5, companyName: "לופטהנזה" },
-        { companyCode: 6, companyName: "בריטיש איירווייס" },
-        { companyCode: 7, companyName: "איירפראנס" },
-        { companyCode: 3, companyName: "Delta" }
-    ]);
+    const companies = useSelector(state => state.event.companies);
 
     useEffect(() => {
         setIsLoading(true);
         // ביצוע בקשות ברצף במקום במקביל
         dispatch(getFlightsThank())
             .then(() => dispatch(getOrdersThank()))
+            .then(() => dispatch(getCompanyThank()))
             .finally(() => {
                 setIsLoading(false);
             });
@@ -640,7 +633,7 @@ export const GetManagerFlights = () => {
                                     <select 
                                         value={newFlight.companyCode} 
                                         onChange={(e) => {
-                                            const selectedCompany = companies.find(c => c.companyCode === parseInt(e.target.value));
+                                            const selectedCompany = companies.find(c => c.code === parseInt(e.target.value));
                                             setNewFlight({
                                                 ...newFlight, 
                                                 companyCode: e.target.value,

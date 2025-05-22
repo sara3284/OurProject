@@ -16,6 +16,8 @@ import { updateOrderThank } from "./updateOrderThank";
 import { deleteOrderThank } from "./deleteOrderThank";
 import { getDetailsByIdThank } from "./getDetailsByIdThank";
 import { addFlightThank } from "./addFlightThank";
+import { deleteCompanyThank } from "./deleteCompanyThank";
+import { addCompanyThank } from "./addCompanyThank";
 
 export const INITIALSTATE = {
     orders: [{
@@ -156,6 +158,11 @@ export const flightsSlice = createSlice({
             console.log("success");
             // state.orderCode = state.orderCode+5
         });
+        builder.addCase(addCompanyThank.fulfilled, (state, action) => {
+            state.companies = action.payload;
+            console.log("success");
+            // state.orderCode = state.orderCode+5
+        });
         builder.addCase(getFlightsThank.fulfilled, (state, action) => {
 
             state.flights = action.payload;
@@ -189,6 +196,10 @@ export const flightsSlice = createSlice({
           //  state.orders = action.payload;
         });
         builder.addCase(deleteOrderThank.fulfilled, (state, action) => {
+
+            state.bool = action.payload;
+        });
+        builder.addCase(deleteCompanyThank.fulfilled, (state, action) => {
 
             state.bool = action.payload;
         });

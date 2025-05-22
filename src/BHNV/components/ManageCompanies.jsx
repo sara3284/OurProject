@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { getCompanyThank } from "../slices/getCompanyThank";
 import { Manager } from "./manager";
 import '../css/manageCompanies.css';
+import { deleteCompanyThank } from "../slices/deleteCompanyThank";
+import { addCompanyThank } from "../slices/addCompanyThank";
 
 export const ManageCompanies = () => {
     const dispatch = useDispatch();
@@ -38,24 +40,21 @@ export const ManageCompanies = () => {
         }
 
         // לצורך הדגמה בלבד - יש להחליף בקוד אמיתי
-        console.log("מוסיף חברה חדשה:", newCompany);
-        alert("החברה נוספה בהצלחה!");
+dispatch(addCompanyThank(newCompany));
         setShowAddCompanyModal(false);
         resetCompanyForm();
     };
 
-    // const handleEditCompany = () => {
-    //     // לצורך הדגמה בלבד - יש להחליף בקוד אמיתי
-    //     console.log("עורך חברה:", selectedCompany);
-    //     alert("פרטי החברה עודכנו בהצלחה!");
-    //     setShowEditCompanyModal(false);
-    // };
+    const handleEditCompany = () => {
+        // לצורך הדגמה בלבד - יש להחליף בקוד אמיתי
+        console.log("עורך חברה:", selectedCompany);
+        alert("פרטי החברה עודכנו בהצלחה!");
+        setShowEditCompanyModal(false);
+    };
 
     const handleDeleteCompany = (companyCode) => {
-        if (window.confirm("האם אתה בטוח שברצונך למחוק את החברה?")) {
             // לצורך הדגמה בלבד - יש להחליף בקוד אמיתי
            dispatch(deleteCompanyThank(companyCode));
-        }
     };
 
     const resetCompanyForm = () => {
@@ -101,7 +100,7 @@ export const ManageCompanies = () => {
             ) : companies && companies.length > 0 ? (
                 <div className="companies-grid">
                     {companies.map((company) => (
-                        <div key={company.companyCode} className="company-card">
+                        <div key={company.code} className="company-card">
                             <div className="company-logo">
                                 {company.logo ? (
                                     <img src={company.logo} alt={company.companyName} />
@@ -113,22 +112,22 @@ export const ManageCompanies = () => {
                             </div>
                             <div className="company-info">
                                 <h3>{company.companyName}</h3>
-                                <p className="company-code">קוד חברה: {company.companyCode}</p>
+                                <p className="company-code">קוד חברה: {company.code}</p>
                                 {company.country && <p className="company-country">מדינה: {company.country}</p>}
                                 {company.foundedYear && <p className="company-founded">נוסדה: {company.foundedYear}</p>}
                                 {company.fleetSize && <p className="company-fleet">גודל צי: {company.fleetSize} מטוסים</p>}
                             </div>
                             <div className="company-actions">
-                                <button 
+                                {/* <button 
                                     className="edit-button" 
                                     onClick={() => handleCompanySelect(company)}
                                     title="ערוך פרטי חברה"
                                 >
                                     <i className="material-icons">edit</i>
-                                </button>
+                                </button> */}
                                 <button 
                                     className="delete-button" 
-                                    onClick={() => handleDeleteCompany(company.companyCode)}
+                                    onClick={() => handleDeleteCompany(company.companyName)}
                                     title="מחק חברה"
                                 >
                                     <i className="material-icons">delete</i>
