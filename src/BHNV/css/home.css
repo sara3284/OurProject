@@ -1563,7 +1563,7 @@ a:focus, button:focus {
   box-shadow: var(--shadow-lg);
 }
 
-..offer-card:hover {
+.offer-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
 }
