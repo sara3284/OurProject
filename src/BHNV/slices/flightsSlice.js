@@ -159,9 +159,27 @@ export const flightsSlice = createSlice({
             // state.orderCode = state.orderCode+5
         });
         builder.addCase(addCompanyThank.fulfilled, (state, action) => {
-            state.companies = action.payload;
-            console.log("success");
-            // state.orderCode = state.orderCode+5
+            console.log('🟢 addCompanyThank.fulfilled - payload:', action.payload);
+            console.log('🟢 Current companies before update:', state.companies);
+            
+            // נסה שתי אפשרויות
+            if (Array.isArray(action.payload)) {
+                console.log('🟢 Payload is array, replacing companies');
+                state.companies = action.payload;
+            } else {
+                console.log('🟢 Payload is single company, adding to list');
+                // אם החברות הקיימות הן רק ברירת מחדל, החלף אותן
+                if (state.companies.length === 1 && state.companies[0].companyCode === 0) {
+                    state.companies = [action.payload];
+                } else {
+                    state.companies.push(action.payload);
+                }
+            }
+            
+            console.log('🟢 Companies after update:', state.companies);
+        });
+        builder.addCase(addCompanyThank.rejected, (state, action) => {
+            console.error('🔴 addCompanyThank.rejected:', action.payload);
         });
         builder.addCase(getFlightsThank.fulfilled, (state, action) => {
 
@@ -180,7 +198,7 @@ export const flightsSlice = createSlice({
             state.passenger = action.payload;
         });
         builder.addCase(updatePassenger.fulfilled, (state, action) => {
-            debugger
+            
             state.passenger = action.meta.arg;
 
         });

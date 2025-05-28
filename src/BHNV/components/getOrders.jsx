@@ -57,7 +57,7 @@ export const GetOrders = () => {
     };
 
     const handlePassengerDetails = async(passengerId) => {
-        setIsLoadingPassenger(true);
+        // setIsLoadingPassenger(true);
         setShowPassengerDetails(true);
       
     dispatch(getDetailsByIdThank(passengerId))
@@ -453,10 +453,10 @@ export const GetOrders = () => {
                                         </div>
                                     </div>
                                     <div className="detail-row">
-                                        <div className="detail-group">
+                                        {/* <div className="detail-group">
                                             <span className="detail-label">אימייל:</span>
                                             <span className="detail-value">{passenger.email}</span>
-                                        </div>
+                                        </div> */}
                                         <div className="detail-group">
                                             <span className="detail-label">טלפון:</span>
                                             <span className="detail-value">{passenger.phone}</span>

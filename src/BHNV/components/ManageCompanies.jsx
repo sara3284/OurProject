@@ -14,14 +14,8 @@ export const ManageCompanies = () => {
     const [showEditCompanyModal, setShowEditCompanyModal] = useState(false);
     const [selectedCompany, setSelectedCompany] = useState(null);
     const [newCompany, setNewCompany] = useState({
-        companyCode: "",
+        companyCode: 0,
         companyName: "",
-        country: "",
-        foundedYear: "",
-        logo: "",
-        website: "",
-        fleetSize: "",
-        description: ""
     });
 
     useEffect(() => {
@@ -32,20 +26,35 @@ export const ManageCompanies = () => {
             });
     }, [dispatch]);
 
-    const handleAddCompany = () => {
-        // בדיקת תקינות הנתונים
-        if (!newCompany.companyName || !newCompany.country) {
-            alert("נא למלא את כל שדות החובה");
+    const handleAddCompany = async () => {
+        console.log('🔵 handleAddCompany called with:', newCompany);
+        
+        if (!newCompany.companyName.trim()) {
+            alert("נא למלא את שם החברה");
             return;
         }
 
-        // לצורך הדגמה בלבד - יש להחליף בקוד אמיתי
-dispatch(addCompanyThank(newCompany));
-        setShowAddCompanyModal(false);
-        resetCompanyForm();
+        try {
+            console.log('🔵 Dispatching addCompanyThank...');
+            // שלח רק את שם החברה, לא את כל האובייקט
+            const result = await dispatch(addCompanyThank(newCompany.companyName));
+            console.log('🟢 addCompanyThank result:', result);
+            
+            console.log('🔵 Dispatching getCompanyThank to refresh...');
+            await dispatch(getCompanyThank());
+            console.log('🟢 getCompanyThank completed');
+            
+            setShowAddCompanyModal(false);
+            resetCompanyForm();
+            console.log('🟢 Modal closed and form reset');
+        } catch (error) {
+            console.error('🔴 Error in handleAddCompany:', error);
+            alert("שגיאה בהוספת החברה");
+        }
     };
 
     const handleEditCompany = () => {
+        
         // לצורך הדגמה בלבד - יש להחליף בקוד אמיתי
         console.log("עורך חברה:", selectedCompany);
         alert("פרטי החברה עודכנו בהצלחה!");
@@ -59,14 +68,9 @@ dispatch(addCompanyThank(newCompany));
 
     const resetCompanyForm = () => {
         setNewCompany({
-            companyCode: "",
+            companyCode:0,
             companyName: "",
-            country: "",
-            foundedYear: "",
-            logo: "",
-            website: "",
-            fleetSize: "",
-            description: ""
+           
         });
     };
 
@@ -125,13 +129,13 @@ dispatch(addCompanyThank(newCompany));
                                 >
                                     <i className="material-icons">edit</i>
                                 </button> */}
-                                <button 
+                                {/* <button 
                                     className="delete-button" 
                                     onClick={() => handleDeleteCompany(company.companyName)}
                                     title="מחק חברה"
                                 >
                                     <i className="material-icons">delete</i>
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     ))}
@@ -180,7 +184,7 @@ dispatch(addCompanyThank(newCompany));
                                         required
                                     />
                                 </div>
-                                <div className="form-group">
+                                {/* <div className="form-group">
                                     <label>קוד חברה:</label>
                                     <input 
                                         type="number" 
@@ -188,10 +192,10 @@ dispatch(addCompanyThank(newCompany));
                                         onChange={(e) => setNewCompany({...newCompany, companyCode: e.target.value})}
                                         placeholder="הקוד יוקצה אוטומטית אם לא יוזן"
                                     />
-                                </div>
+                                </div> */}
                             </div>
                             
-                            <div className="form-row">
+                            {/* <div className="form-row">
                                 <div className="form-group">
                                     <label>מדינת מקור: <span className="required">*</span></label>
                                     <input 
@@ -259,11 +263,11 @@ dispatch(addCompanyThank(newCompany));
                                         rows="4"
                                     ></textarea>
                                 </div>
-                            </div>
-                            
-                            <div className="form-note">
+                            *
+                             </div>/}
+                            {/* <div className="form-note">
                                 <span className="required">*</span> שדות חובה
-                            </div>
+                            </div> */}
                         </div>
                         
                         <div className="modal-footer">
@@ -271,7 +275,7 @@ dispatch(addCompanyThank(newCompany));
                                 className="cancel-button" 
                                 onClick={() => {
                                     setShowAddCompanyModal(false);
-                                    resetCompanyForm();
+                                    // resetCompanyForm();
                                 }}
                             >
                                 ביטול
@@ -280,14 +284,14 @@ dispatch(addCompanyThank(newCompany));
                                 className="save-button" 
                                 onClick={handleAddCompany}
                             >
-                                הוסף חברה
+                                הוסף חןוןטןטברה
                             </button>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* חלונית עריכת חברה */}
+             {/*חלונית עריכת חברה
             {showEditCompanyModal && selectedCompany && (
                 <div className="modal-overlay">
                     <div className="company-modal">
@@ -415,7 +419,7 @@ dispatch(addCompanyThank(newCompany));
                         </div>
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };
